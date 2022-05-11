@@ -10,7 +10,7 @@ const DB_PASSWORD = 'vjz,fpflfyys[';
 // ```````````
 
 
-function connectToDatabase() {
+function &connectToDatabase() {
     $db_options = getDatabaseConnectionOptions();
 
     try {
@@ -19,12 +19,9 @@ function connectToDatabase() {
     }
     catch (PDOException $e) {
         $message = 'Connection to the database failed:<br>' . $e->getMessage();
-        echo json_encode([
-            'status' => 'error',
-            'message' => getServerMessage($message),
-            'from' => 'database-module/database.php'
-        ]);
-        return null;
+        addErrorToLog($message, 'database-module/database.php');
+        $db = null;
+        return $db;
     }
 }
 

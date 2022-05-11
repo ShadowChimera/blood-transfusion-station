@@ -3,12 +3,41 @@
 $db = connectToDatabase();
 if (is_null($db)) {
     $message = 'execution is not possible without a connection to the database';
-    echo getServerMessage($message);
+    echo json_encode([
+        'status' => 'error',
+        'message' => getServerMessage($message),
+        'from' => 'test.php'
+    ]);
     return;
 }
 
-$message = 'database connection established';
+try {
+    $sql = "SELECT * FROM donors WHERE donor_id = :donor_id";
+    $stmt = $db->prepare($sql);
+    $stmt->execute([':donor_id' => '2']);
 
-echo getServerMessage($message);
+    $row_count = $stmt->rowCount();
+    
+    $users_list = [];
+    
+    foreach($stmt as $user){
+        $users_list[] = $user;
+    }
+
+    echo json_encode([
+        'status' => 'ok',
+        'message' => "row count: $row_count",
+        'result' => $users_list,
+        'from' => 'test.php'
+    ]);
+}
+catch (PDOException $e) {
+    $message = 'registration failed:<br>' . $e->getMessage();
+    echo json_encode([
+        'status' => 'error',
+        'message' => getServerMessage($message),
+        'from' => 'test.php'
+    ]);
+}
 
 ?>

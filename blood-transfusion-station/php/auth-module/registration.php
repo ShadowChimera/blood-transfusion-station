@@ -4,11 +4,8 @@
 $db = connectToDatabase();
 if (is_null($db)) {
     $message = 'execution is not possible without a connection to the database';
-    echo json_encode([
-        'status' => 'error',
-        'message' => getServerMessage($message),
-        'from' => 'auth-module/registration.php'
-    ]);
+    addErrorToLog($message, 'auth-module/registration.php');
+    sendLogAsResponse();
     return;
 }
 
@@ -30,44 +27,64 @@ if (isset($_POST['password'])) {
     $password = $_POST['password'];
 }
 
-if (
-    is_null($password) || 
-    (
-        is_null($email) && 
-        is_null($phone)
-    )
-) {
-    $message = 'password can\'t be null; email or phone can\'t be null';
-    echo json_encode([
-        'status' => 'error',
-        'message' => getServerMessage($message),
-        'from' => 'auth-module/registration.php'
-    ]);
+if (!isRegistrationParametersValid($email, $phone, $password)) {
     return;
 }
 
-$isValid = true;
-$message = '';
 
-if (!isEmailValid($email)) {
-    $message .= 'email is invalid; ';
-    $isValid = false;
-}
-if (!isPhoneValid($phone)) {
-    $message .= 'phone is invalid; ';
-    $isValid = false;
-}
-if (!isPasswordValid($password)) {
-    $message .= 'password is invalid; ';
-    $isValid = false;
-}
+// ``````````
 
-if (!$isValid) {
-    echo json_encode([
-        'status' => 'error',
-        'message' => getServerMessage($message),
-        'from' => 'auth-module/registration.php'
-    ]);
+
+const SQL_CHECK_DONORS = '
+SELECT donor_email, donor_phone 
+FROM donors 
+WHERE 
+(
+    donor_email IS NOT NULL
+    AND 
+    donor_email = :donor_email
+) 
+OR 
+(
+    donor_phone IS NOT NULL
+    AND 
+    donor_phone = :donor_phone
+)
+';
+
+try {
+    $checking_donors_params = [
+        ':donor_email' => $email,
+        ':donor_phone' => $phone
+    ];
+    
+    $check_donors_statement = $db->prepare(SQL_CHECK_DONORS);
+    $check_donors_statement->execute($checking_donors_params);
+    
+    if ($check_donors_statement->rowCount()) {
+        $user = $check_donors_statement->fetch();
+        $message = '';
+        if ($user['donor_email'] === $email) {
+            $message .= 'an account with this email is already registered; ';
+        }
+        if ($user['donor_phone'] === $phone) {
+            $message .= 'an account with this phone is already registered; ';
+        }
+    
+        $global_sm_log[] = [
+            'status' => 'error',
+            'message' => getServerMessage($message),
+            'from' => 'auth-module/registration.php'
+        ];
+    
+        sendLogAsResponse();
+        return;
+    }
+}
+catch (PDOException $e) {
+    $message = "donor checking failed: <br>" . $e->getMessage();
+    addErrorToLog($message, 'auth-module/registration.php');
+    sendLogAsResponse();
     return;
 }
 
@@ -87,12 +104,13 @@ VALUES
     :donor_email,
     :donor_phone,
     :donor_password
-);
+)
 ';
+// const SQL_ADD_DONOR = 'INSERT INTO donors (donor_email, donor_phone, donor_password) VALUES (:donor_email, :donor_phone, :donor_password)';
 
 $passwordHash = password_hash($password, PASSWORD_DEFAULT);
 
-$registration_parameters = [
+$registration_params = [
     ':donor_email' => $email,
     ':donor_phone' => $phone,
     ':donor_password' => $passwordHash
@@ -100,22 +118,20 @@ $registration_parameters = [
 
 try {
     $register_statement = $db->prepare(SQL_ADD_DONOR);
-    $register_statement->execute($registration_parameters);
+    $register_statement->execute($registration_params);
 
     $message = 'registration successful';
-    echo json_encode([
+    $global_sm_log[] = [
         'status' => 'ok',
         'message' => getServerMessage($message),
         'from' => 'auth-module/registration.php'
-    ]);
+    ];
 }
 catch (PDOException $e) {
     $message = 'registration failed:<br>' . $e->getMessage();
-    echo json_encode([
-        'status' => 'error',
-        'message' => getServerMessage($message),
-        'from' => 'auth-module/registration.php'
-    ]);
+    addErrorToLog($message, 'auth-module/registration.php');
 }
+
+sendLogAsResponse();
 
 ?>
