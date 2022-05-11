@@ -1,0 +1,27 @@
+*,
+*:after
+*:before {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+
+    padding: 1em;
+
+    color: #333;
+    font-size: 20px;
+}
+
+.result {
+    &-title {
+        margin-bottom: .5em;
+
+        color: #777;
+        font-size: inherit;
+        font-weight: 400;
+    }
+
+    padding: 1em;
+    border: 1px solid #33333333;
+}
