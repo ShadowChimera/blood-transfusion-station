@@ -24,9 +24,9 @@ const INPUT_REG_EXPS = {
 }
 const INPUT_STATES = {
     error: 'error',
-    warning: 'error',
+    warning: 'warning',
     ERROR: 'error',
-    WARNING: 'error',
+    WARNING: 'warning',
 }
 
 let globalErrorLog = ''
@@ -177,48 +177,4 @@ function showErrorsLog(info_element) {
     if (info_element !== null) {
         info_element.innerHTML = globalErrorLog
     }
-}
-
-function old__validateAuthInputs(auth_inputs, info_element = null) {
-    globalErrorLog = ''
-    let isValid = true
-
-    clearErrors(auth_inputs, info_element)
-
-    for (let inputName in auth_inputs) {
-        const inputValue = auth_inputs[inputName].value
-
-        const isRepeatInput = inputName.includes('repeat')
-
-        if (isRepeatInput) {
-            const suffixIndex = inputName.indexOf('-repeat')
-            const inputToRepeatName = inputName.slice(0, suffixIndex)
-            const inputToRepeatValue = auth_inputs[inputToRepeatName].value
-
-            if (inputValue !== inputToRepeatValue) {
-                showError(auth_inputs[inputName], ERROR_MESSAGES[inputName])
-                addErrorToLog(EXTENDED_ERROR_MESSAGES[inputName])
-                isValid = false
-            }
-
-            continue
-        }
-
-        const isCurInputValid =
-            inputValue.match(INPUT_REG_EXPS[inputName]) !== null
-
-        if (isCurInputValid) {
-            continue
-        }
-
-        showError(auth_inputs[inputName], ERROR_MESSAGES[inputName])
-        addErrorToLog(EXTENDED_ERROR_MESSAGES[inputName])
-        isValid = false
-    }
-
-    if (!isValid && info_element !== null) {
-        info_element.innerHTML = globalErrorLog
-    }
-
-    return isValid
 }
