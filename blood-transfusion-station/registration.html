@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width = device-width, initial-scale=1.0">
+
+    <!-- ! debug -->
+    <meta http-equiv="cache-control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="pragma" content="no-cache" />
+    <meta http-equiv="expires" content="0" />
+    <!-- ! /debug -->
+
+    <title>Регистрация</title>
+    <link rel="shortcut icon" href="/assets/images/icons/favicons/favicon.svg">
+
+    <link rel="stylesheet" href="css/test.css">
+
+    <script defer type="module" src="/js/auth-module/registration.js"></script>
+</head>
+<body>
+
+    <h1>Регистрация</h1>
+
+    <form action="/php/auth-module/registration.php" method="post" id="registration-form" class="form" >
+        <input type="email" name="email" id="email-input" class="input" placeholder="Почта">
+        <input type="tel" name="phone" id="phone-input" class="input" placeholder="Телефон">
+        <input type="password" name="password" id="password-input" class="input" placeholder="Пароль">
+        <input type="password" name="password-repeat" id="password-repeat-input" class="input" placeholder="Повтор пароля">
+
+        <div class="form-info"></div>
+
+        <input type="submit" id="registration-button" class="button" value="Регистрация">
+    </form>
+
+    <section class="result-container" id="common-server-answer-section">
+        <h2 class="result-title">Ответ с сервера</h2>
+        <div class="result" id="common-server-answer"></div>
+    </section>
+
+</body>
+</html>
