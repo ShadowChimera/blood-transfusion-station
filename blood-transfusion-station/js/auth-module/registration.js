@@ -1,3 +1,8 @@
+'use strict'
+
+import { REQUEST_TYPES, sendAuthRequest } from './auth-request.js'
+import { validateAuthInputs } from './data-validation'
+
 let registrationData = null
 
 let registration_form = null
@@ -27,25 +32,22 @@ function main() {
 async function register(e) {
     e.preventDefault()
 
-    const registration_data = getValidRegistrationData()
-
-    if (registration_data === null) {
+    if (!validateAuthInputs(registration_inputs)) {
         return
     }
 
-    let response = await sendRegistrationRequest(registration_data)
+    const registration_data = new FormData(registration_form)
+
+    let response = await sendAuthRequest(
+        registration_data,
+        REQUEST_TYPES.REGISTRATION
+    )
     console.log(response)
 
     response = JSON.parse(response)
     console.log(response)
 
     showServerResponse(response)
-}
-
-function getValidRegistrationData() {
-    const registrationData = new FormData(registration_form)
-
-    return null
 }
 
 function showServerResponse(response) {
@@ -60,30 +62,4 @@ function showServerResponse(response) {
         console.log(serverMessage.message)
         result_block.innerHTML += `<h6>Message</h6>${serverMessage.message}`
     })
-}
-
-async function sendRegistrationRequest(registrationData, url) {
-    const response = await fetch(url, {
-        method: 'POST',
-        body: registrationData,
-    })
-
-    if (!response.ok) {
-        const statusInfo = `${response.status}: ${response.statusText}`
-        return statusInfo
-    }
-
-    let result = await response.text()
-    return result
-
-    // return new Promise((resolve, reject) => {
-    //     if (!response.ok) {
-    //         const statusInfo = `${response.status}: ${response.statusText}`
-    //         reject(statusInfo)
-    //         return
-    //     }
-
-    //     let serverAnswer = await response.text()
-    //     resolve(serverAnswer)
-    // })
 }

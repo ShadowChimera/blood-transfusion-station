@@ -1,3 +1,5 @@
+'use strict'
+
 const TEST_PHP_URL = '/php/auth-module/registration.php'
 // const TEST_PHP_URL = '/php/test.php'
 let result_block = null
