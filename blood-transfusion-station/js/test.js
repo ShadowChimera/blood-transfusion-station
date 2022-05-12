@@ -29,11 +29,10 @@ async function sendRequest() {
         return
     }
 
-    const serverAnswers = await response.json()
-    // const serverAnswer = await response.text()
-    // console.log(serverAnswer)
-    // return
+    // const serverAnswers = await response.json()
+    let serverAnswers = await response.text()
     console.log(serverAnswers)
+    serverAnswers = JSON.parse(serverAnswers)
 
     result_block.innerHTML = ''
     serverAnswers.forEach((serverAnswer) => {
