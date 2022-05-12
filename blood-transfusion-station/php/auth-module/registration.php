@@ -19,15 +19,20 @@ $password = null;
 
 if (isset($_POST['email'])) {
     $email = $_POST['email'];
+    $email = $email === '' ? null : $email;
 }
 if (isset($_POST['phone'])) {
     $phone = $_POST['phone'];
+    $phone = $phone === '' ? null : $phone;
+
 }
 if (isset($_POST['password'])) {
     $password = $_POST['password'];
+    $password = $password === '' ? null : $password;
 }
 
 if (!isRegistrationParametersValid($email, $phone, $password)) {
+    sendLogAsResponse();
     return;
 }
 
@@ -64,19 +69,14 @@ try {
     if ($check_donors_statement->rowCount()) {
         $user = $check_donors_statement->fetch();
         $message = '';
-        if ($user['donor_email'] === $email) {
+        if ($email !== null && $user['donor_email'] === $email) {
             $message .= 'an account with this email is already registered; ';
         }
-        if ($user['donor_phone'] === $phone) {
+        if ($phone !== null && $user['donor_phone'] === $phone) {
             $message .= 'an account with this phone is already registered; ';
         }
     
-        $global_sm_log[] = [
-            'status' => 'error',
-            'message' => getServerMessage($message),
-            'from' => 'auth-module/registration.php'
-        ];
-    
+        addErrorToLog($message, 'auth-module/registration.php');    
         sendLogAsResponse();
         return;
     }
@@ -106,7 +106,6 @@ VALUES
     :donor_password
 )
 ';
-// const SQL_ADD_DONOR = 'INSERT INTO donors (donor_email, donor_phone, donor_password) VALUES (:donor_email, :donor_phone, :donor_password)';
 
 $passwordHash = password_hash($password, PASSWORD_DEFAULT);
 

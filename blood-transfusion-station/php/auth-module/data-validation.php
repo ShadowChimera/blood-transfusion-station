@@ -6,10 +6,18 @@ const PHONE_PATTERN = '/^\+\d{12}$/';
 const PASSWORD_PATTERN = '/^[0-9a-zA-Z!@#$%^&*_]+$/';
 
 function isEmailValid($email) {
+    if ($email === null) {
+        return true;
+    }
+    
     return (bool) preg_match(EMAIL_PATTERN, $email);
 }
 
 function isPhoneValid($phone) {
+    if ($phone === null) {
+        return true;
+    }
+    
     return (bool) preg_match(PHONE_PATTERN, $phone);
 }
 
@@ -18,23 +26,23 @@ function isPasswordValid($password) {
 }
 
 function isRegistrationParametersValid($email, $phone, $password) {
-    if (
-        is_null($password) || 
-        (
-            is_null($email) && 
-            is_null($phone)
-        )
-    ) {
-        $message = 'password can\'t be null; email or phone can\'t be null';
-        echo json_encode([
-            'status' => 'error',
-            'message' => getServerMessage($message),
-            'from' => 'auth-module/data-validation.php'
-        ]);
+    $isValid = true;
+    $message = '';
+
+    if (is_null($email) && is_null($phone)) {
+        $message .= "email or phone can't be null; ";
+        $isValid = false;
+    }
+    if (is_null($password)) {
+        $message = "password can't be null; ";
+        $isValid = false;
+    }
+
+    if (!$isValid) {
+        addErrorToLog($message, 'auth-module/data-validation.php');
         return false;
     }
     
-    $isValid = true;
     $message = '';
     
     if (!isEmailValid($email)) {
@@ -51,11 +59,7 @@ function isRegistrationParametersValid($email, $phone, $password) {
     }
     
     if (!$isValid) {
-        echo json_encode([
-            'status' => 'error',
-            'message' => getServerMessage($message),
-            'from' => 'auth-module/data-validation.php'
-        ]);
+        addErrorToLog($message, 'auth-module/data-validation.php');
         return false;
     }
 
