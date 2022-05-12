@@ -1,12 +1,12 @@
 'use strict'
 
 import { REQUEST_TYPES, sendAuthRequest } from './auth-request.js'
-import { validateAuthInputs } from './data-validation'
-
-let registrationData = null
+// import { REQUEST_TYPES, AuthRequest } from './auth-request.js'
+import { validateRegistrationInputs } from './data-validation.js'
 
 let registration_form = null
 let registration_inputs = {}
+let registration_formInfo = null
 let registration_button = null
 
 document.addEventListener('DOMContentLoaded', main)
@@ -21,6 +21,9 @@ function main() {
         registration_inputs[inputName] = registration_input
     }
 
+    registration_formInfo =
+        registration_form.querySelector('.form-info') ?? null
+
     registration_button = registration_form.querySelector(
         '#registration-button'
     )
@@ -32,7 +35,9 @@ function main() {
 async function register(e) {
     e.preventDefault()
 
-    if (!validateAuthInputs(registration_inputs)) {
+    if (
+        !validateRegistrationInputs(registration_inputs, registration_formInfo)
+    ) {
         return
     }
 
@@ -51,15 +56,15 @@ async function register(e) {
 }
 
 function showServerResponse(response) {
-    result_block.innerHTML = ''
+    registration_formInfo.innerHTML = ''
     response.forEach((serverMessage) => {
         if (!serverMessage.status !== 'ok') {
             console.log(serverMessage.message)
-            result_block.innerHTML += `<h6>Error</h6>${serverMessage.message}`
+            registration_formInfo.innerHTML += `<b>Error</b>${serverMessage.message}`
             return
         }
 
         console.log(serverMessage.message)
-        result_block.innerHTML += `<h6>Message</h6>${serverMessage.message}`
+        registration_formInfo.innerHTML += `<h6>Message</h6>${serverMessage.message}`
     })
 }
