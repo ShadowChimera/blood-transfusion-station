@@ -1,7 +1,7 @@
 'use strict'
 
 import { REQUEST_TYPES, sendAuthRequest } from './auth-request.js'
-import { processForm } from './form-processing.js'
+import { validateRegistrationInputs } from './data-validation.js'
 
 let authorization_forms = {
     donor: {},
@@ -12,10 +12,10 @@ document.addEventListener('DOMContentLoaded', main)
 
 function main() {
     authorization_forms.donor.formElement = document.getElementById(
-        'donor-registration-form'
+        'donor-authorization-form'
     )
     authorization_forms.hospital.formElement = document.getElementById(
-        'hospital-registration-form'
+        'hospital-authorization-form'
     )
 
     addFormsElements(authorization_forms)
@@ -42,7 +42,7 @@ function addFormsElements(forms) {
         forms[formName].submitButton =
             forms[formName].formElement.querySelector('input[type=submit]')
 
-        forms[formName].submitButton.addEventListener('click', register)
+        forms[formName].submitButton.addEventListener('click', authorize)
     }
 
     return forms
@@ -50,31 +50,27 @@ function addFormsElements(forms) {
 
 // ````````````
 
-async function register(e) {
+async function authorize(e) {
     e.preventDefault()
 
-    const registration_form = e.currentTarget.closest('.form')
-    const formName = registration_form.getAttribute('name')
+    const authorization_form = e.currentTarget.closest('.form')
 
     /*
         !   Добавить регистрацию второго типа пользователя
-        *   const userType = formName
+        *   const userType = registration_form.getAttribute('name')
     */
 
     if (
-        !validateAuthorizationInputs(
-            authorization_forms[formName].inputElements,
-            authorization_forms[formName].infoElement
-        )
+        !validateAuthorizationInputs(registration_inputs, registration_formInfo)
     ) {
         return
     }
 
-    const registration_data = new FormData(registration_form)
+    const authorization_data = new FormData(authorization_form)
 
     let response = await sendAuthRequest(
-        registration_data,
-        REQUEST_TYPES.registration
+        authorization_data,
+        REQUEST_TYPES.authorization
     )
     console.log(response)
 

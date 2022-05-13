@@ -9,7 +9,7 @@ document.addEventListener('DOMContentLoaded', main)
 function main() {
     result_block = document.getElementById('common-server-answer')
 
-    sendRequest()
+    // sendRequest()
 }
 
 async function sendRequest() {

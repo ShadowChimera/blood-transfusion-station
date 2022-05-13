@@ -6,8 +6,8 @@ const urlsByRequestType = {
 }
 
 export const REQUEST_TYPES = {
-    REGISTRATION: 'registration',
-    AUTHORIZATION: 'authorization',
+    registration: 'registration',
+    authorization: 'authorization',
 }
 
 export async function sendAuthRequest(authData, type) {
