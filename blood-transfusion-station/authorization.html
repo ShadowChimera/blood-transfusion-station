@@ -10,38 +10,30 @@
     <meta http-equiv="expires" content="0" />
     <!-- ! /debug -->
 
-    <title>Регистрация</title>
+    <title>Авторизация</title>
     <link rel="shortcut icon" href="/assets/images/icons/favicons/favicon.svg">
 
     <link rel="stylesheet" href="css/test.css">
 
-    <script defer type="module" src="/js/auth-module/registration.js"></script>
+    <script defer type="module" src="/js/auth-module/authorization.js"></script>
 </head>
 <body>
 
-    <h1>Регистрация</h1>
+    <h1>Авторизация</h1>
 
-    <form action="/php/auth-module/registration.php" method="post" id="donor-registration-form" name="donor" class="form">
+    <form action="/php/auth-module/authorization.php" method="post" id="donor-authorization-form" name="donor" class="form">
         <div class="input-container">
             <div class="input-info"></div>
-            <input type="email" name="email" id="donor-email-input" class="input" placeholder="Почта">
-        </div>
-        <div class="input-container">
-            <div class="input-info"></div>
-            <input type="tel" name="phone" id="donor-phone-input" class="input" placeholder="Телефон">
+            <input type="text" name="login" id="donor-login-input" class="input" placeholder="Почта или телефон">
         </div>
         <div class="input-container">
             <div class="input-info"></div>
             <input type="password" name="password" id="donor-password-input" class="input" placeholder="Пароль">
         </div>
-        <div class="input-container">
-            <div class="input-info"></div>
-            <input type="password" name="repeat-password" id="donor-password-repeat-input" class="input" placeholder="Повтор пароля">
-        </div>
 
         <div class="form-info"></div>
 
-        <input type="submit" id="donor-registration-button" class="button" value="Зарегистрироваться">
+        <input type="submit" id="donor-authorization-button" class="button" value="Войти">
     </form>
 
     <section class="result-container" id="common-server-answer-section">
