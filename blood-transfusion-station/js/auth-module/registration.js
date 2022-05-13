@@ -3,49 +3,21 @@
 import { REQUEST_TYPES, sendAuthRequest } from './auth-request.js'
 import { processForm } from './form-processing.js'
 
-let authorization_forms = {
-    donor: {},
-    hospital: {},
-}
-
 document.addEventListener('DOMContentLoaded', main)
 
+const processedForms = {}
+
 function main() {
-    authorization_forms.donor.formElement = document.getElementById(
-        'donor-registration-form'
-    )
-    authorization_forms.hospital.formElement = document.getElementById(
+    const donor_regForm = document.getElementById('donor-registration-form')
+    const hospital_regForm = document.getElementById(
         'hospital-registration-form'
     )
 
-    addFormsElements(authorization_forms)
-}
+    let processedForm = processForm(donor_regForm, register)
+    processedForms[processedForm.formName] = processedForm
 
-function addFormsElements(forms) {
-    for (let formName in forms) {
-        if (forms[formName].formElement === null) {
-            continue
-        }
-
-        forms[formName].inputElements = {}
-
-        const inputs = forms[formName].formElement.querySelectorAll('.input')
-
-        for (let input of inputs) {
-            const inputName = input.getAttribute('name')
-            forms[formName].inputElements[inputName] = input
-        }
-
-        forms[formName].infoElement =
-            forms[formName].formElement.querySelector('.form-info') ?? null
-
-        forms[formName].submitButton =
-            forms[formName].formElement.querySelector('input[type=submit]')
-
-        forms[formName].submitButton.addEventListener('click', register)
-    }
-
-    return forms
+    // processedForm = processForm(hospital_regForm, register)
+    // forms[processForm.formName] = processForm
 }
 
 // ````````````
@@ -53,24 +25,12 @@ function addFormsElements(forms) {
 async function register(e) {
     e.preventDefault()
 
-    const registration_form = e.currentTarget.closest('.form')
-    const formName = registration_form.getAttribute('name')
+    const formName = e.currentTarget.closest('.form').getAttribute('name')
+    const processedForm = processedForms[formName]
+    const userType = formName
 
-    /*
-        !   Добавить регистрацию второго типа пользователя
-        *   const userType = formName
-    */
-
-    if (
-        !validateAuthorizationInputs(
-            authorization_forms[formName].inputElements,
-            authorization_forms[formName].infoElement
-        )
-    ) {
-        return
-    }
-
-    const registration_data = new FormData(registration_form)
+    const registration_data = new FormData(processedForm.formElement)
+    registration_data.append('user-type', userType)
 
     let response = await sendAuthRequest(
         registration_data,
@@ -81,21 +41,19 @@ async function register(e) {
     response = JSON.parse(response)
     console.log(response)
 
-    showServerResponse(response)
+    showServerResponse(response, processedForm.infoElement)
 }
 
-function showServerResponse(response) {
-    registration_formInfo.innerHTML = ''
+function showServerResponse(response, infoElement) {
+    infoElement.innerHTML = ''
     response.forEach((serverMessage) => {
         if (!serverMessage.status !== 'ok') {
             console.log(serverMessage.message)
-            registration_formInfo.innerHTML +=
-                '<b>Error</b>' + serverMessage.message
+            infoElement.innerHTML += '<b>Error</b>' + serverMessage.message
             return
         }
 
         console.log(serverMessage.message)
-        registration_formInfo.innerHTML +=
-            '<b>Message</b>' + serverMessage.message
+        infoElement.innerHTML += '<b>Message</b>' + serverMessage.message
     })
 }

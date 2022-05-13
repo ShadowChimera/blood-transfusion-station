@@ -4,6 +4,8 @@ import * as DataValidation from './data-validation.js'
 
 const ERROR_MESSAGES = {
     emailOrPhoneRequired: 'Одно из этих полей должно быть заполнено',
+    passwordRequired: 'Пароль не может быть пустым',
+    repeatPasswordRequired: 'Необходимо повторить пароль',
     emailValidation: 'Неверный формат почты',
     phoneValidation: 'Неверный формат телефона',
     loginValidation: 'Неверный формат',
@@ -14,6 +16,8 @@ const ERROR_MESSAGES = {
 const EXTENDED_ERROR_MESSAGES = {
     emailOrPhoneRequired:
         'Одно из полей: "Почта", "Телефон", должно быть заполнено',
+    passwordRequired: 'Пароль не может быть пустым',
+    repeatPasswordRequired: 'Необходимо повторить пароль',
     emailValidation: 'Неверный формат почты',
     phoneValidation:
         'Телефон должен начинаться со знака "+" и содержать 12 цифр',
@@ -47,6 +51,8 @@ let inputs = null
 let infoElement = null
 
 export function processForm(form, onSubmit = null) {
+    const formName = form.getAttribute('name')
+
     inputs = form.querySelectorAll('.input')
     infoElement = form.querySelector('.form-info')
     const submitButton = form.querySelector('input[type=submit]')
@@ -60,6 +66,13 @@ export function processForm(form, onSubmit = null) {
 
     onSubmitCallback = onSubmit
     submitButton.addEventListener('click', validateInputs)
+
+    return {
+        formName: formName,
+        formElement: form,
+        infoElement: infoElement,
+        inputs: inputs,
+    }
 }
 
 // * Validators *
@@ -82,9 +95,7 @@ function passwordValidator(e) {
 }
 
 function repeatPasswordValidator(e) {
-    if (!e.isTrusted) {
-        return repeatPasswordValidate(e.currentTarget)
-    }
+    return repeatPasswordValidate(e.currentTarget, e.isTrusted)
 }
 
 // *
@@ -94,20 +105,24 @@ function repeatPasswordValidator(e) {
 // *
 
 function validateInputs(e) {
+    e.preventDefault()
+
     errorLog = ''
 
-    let event = new Event('change', false, true)
-
-    isValid = true
-
     for (let input of inputs) {
-        isValid = input.dispatchEvent(event) && isValid
+        if ('createEvent' in document) {
+            let event = document.createEvent('HTMLEvents')
+            event.initEvent('change', false, true)
+            input.dispatchEvent(event)
+        } else {
+            input.fireEvent('onchange')
+        }
     }
 
     infoElement.innerHTML = errorLog
 
-    if (!isValid) {
-        e.preventDefault
+    if (errorLog) {
+        e.preventDefault()
         return
     }
 
@@ -142,9 +157,9 @@ function emailValidate(emailInput) {
                 INPUT_STATES.warning
             )
             addToErrorLog(EXTENDED_ERROR_MESSAGES.emailOrPhoneRequired)
-        }
 
-        return false
+            return
+        }
     }
 
     if (!DataValidation.isEmailValid(emailValue)) {
@@ -154,11 +169,7 @@ function emailValidate(emailInput) {
             INPUT_STATES.error
         )
         addToErrorLog(EXTENDED_ERROR_MESSAGES.emailValidation)
-
-        return false
     }
-
-    return true
 }
 
 function phoneValidate(phoneInput) {
@@ -177,19 +188,19 @@ function phoneValidate(phoneInput) {
 
         if (!emailInputValue) {
             updateInputState(
-                phoneInput,
-                ERROR_MESSAGES.emailOrPhoneRequired,
-                INPUT_STATES.warning
-            )
-            updateInputState(
                 emailInput,
                 ERROR_MESSAGES.emailOrPhoneRequired,
                 INPUT_STATES.warning
             )
-            addToErrorLog(EXTENDED_ERROR_MESSAGES.emailOrPhoneRequired)
-        }
+            updateInputState(
+                phoneInput,
+                ERROR_MESSAGES.emailOrPhoneRequired,
+                INPUT_STATES.warning
+            )
+            // addToErrorLog(EXTENDED_ERROR_MESSAGES.emailOrPhoneRequired)
 
-        return false
+            return
+        }
     }
 
     if (!DataValidation.isPhoneValid(phoneValue)) {
@@ -199,11 +210,7 @@ function phoneValidate(phoneInput) {
             INPUT_STATES.error
         )
         addToErrorLog(EXTENDED_ERROR_MESSAGES.phoneValidation)
-
-        return false
     }
-
-    return true
 }
 
 function loginValidate(loginInput) {
@@ -218,17 +225,24 @@ function loginValidate(loginInput) {
             INPUT_STATES.error
         )
         addToErrorLog(EXTENDED_ERROR_MESSAGES.loginValidation)
-
-        return false
     }
-
-    return true
 }
 
 function passwordValidate(passwordInput) {
     clearInputStates(passwordInput)
 
     const passwordValue = passwordInput.value
+
+    if (!passwordValue) {
+        updateInputState(
+            passwordInput,
+            ERROR_MESSAGES.passwordRequired,
+            INPUT_STATES.error
+        )
+        addToErrorLog(EXTENDED_ERROR_MESSAGES.passwordRequired)
+
+        return
+    }
 
     if (!DataValidation.isPasswordValid(passwordValue)) {
         updateInputState(
@@ -237,24 +251,44 @@ function passwordValidate(passwordInput) {
             INPUT_STATES.error
         )
         addToErrorLog(EXTENDED_ERROR_MESSAGES.passwordValidation)
-
-        return false
     }
-
-    return true
 }
 
-function repeatPasswordValidate(repeatPasswordInput) {
+function repeatPasswordValidate(repeatPasswordInput, isTrusted = true) {
     clearInputStates(repeatPasswordInput)
 
     const repeatPasswordValue = repeatPasswordInput.value
+
+    if (!repeatPasswordValue) {
+        updateInputState(
+            repeatPasswordInput,
+            ERROR_MESSAGES.repeatPasswordRequired,
+            INPUT_STATES.error
+        )
+        addToErrorLog(EXTENDED_ERROR_MESSAGES.repeatPasswordRequired)
+
+        return
+    }
+
+    if (isTrusted) {
+        return
+    }
+
     const passwordInput =
         repeatPasswordInput
             .closest('.form')
             ?.querySelector('.input[name=password]') ?? null
 
     if (passwordInput === null) {
-        return false
+        updateInputState(
+            passwordInput,
+            ERROR_MESSAGES.repeatPasswordValidation,
+            INPUT_STATES.error
+        )
+
+        addToErrorLog('Поле с паролем не может быть найдено')
+
+        return
     }
 
     const passwordValue = passwordInput.value
@@ -271,13 +305,9 @@ function repeatPasswordValidate(repeatPasswordInput) {
             INPUT_STATES.error
         )
         addToErrorLog(EXTENDED_ERROR_MESSAGES.repeatPasswordValidation)
-
-        return false
     }
 
     passwordValidate(passwordInput)
-
-    return true
 }
 
 // *
