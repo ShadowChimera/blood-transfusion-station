@@ -47,7 +47,7 @@ async function register(e) {
 function showServerResponse(response, infoElement) {
     infoElement.innerHTML = ''
     response.forEach((serverMessage) => {
-        if (!serverMessage.status !== 'ok') {
+        if (serverMessage.status !== 'ok') {
             console.log(serverMessage.message)
             infoElement.innerHTML += '<b>Error</b>' + serverMessage.message
             return

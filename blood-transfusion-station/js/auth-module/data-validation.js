@@ -25,8 +25,8 @@ const INPUT_STATES = {
 }
 
 function isEmailValid(email, isEmptyAllowed = true) {
-    email = email ?? null
-    if (isEmptyAllowed && email === null) {
+    // email = email ?? null
+    if (isEmptyAllowed && !email) {
         return true
     }
 
@@ -34,8 +34,8 @@ function isEmailValid(email, isEmptyAllowed = true) {
 }
 
 function isPhoneValid(phone, isEmptyAllowed = true) {
-    phone = phone ?? null
-    if (isEmptyAllowed && phone === null) {
+    // phone = phone ?? null
+    if (isEmptyAllowed && !phone) {
         return true
     }
 

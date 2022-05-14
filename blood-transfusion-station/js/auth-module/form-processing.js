@@ -307,7 +307,7 @@ function repeatPasswordValidate(repeatPasswordInput, isTrusted = true) {
         addToErrorLog(EXTENDED_ERROR_MESSAGES.repeatPasswordValidation)
     }
 
-    passwordValidate(passwordInput)
+    // passwordValidate(passwordInput)
 }
 
 // *
