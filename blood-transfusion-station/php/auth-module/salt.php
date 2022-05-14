@@ -1,8 +1,7 @@
 <?php
 
-function generateSalt() {
+function generateSalt($saltLength = 8) {
     $salt = '';
-    $saltLength = 8; // длина соли
 
     for ($i = 0; $i < $saltLength; $i++) {
         $salt .= chr(mt_rand(33,126)); // символ из ASCII-table
