@@ -1,5 +1,4 @@
-<?php   include "auto-authorization.php";;
-        session_start();
+<?php   include "auto-authorization.php";
 
 $authorized = false;
 

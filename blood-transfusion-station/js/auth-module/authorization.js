@@ -14,6 +14,7 @@ function main() {
     )
 
     let processedForm = processForm(donor_authForm, authorize)
+    // let processedForm = processForm(donor_authForm, test)
     processedForms[processedForm.formName] = processedForm
 
     // processedForm = processForm(hospital_authForm, register)
@@ -21,6 +22,13 @@ function main() {
 }
 
 // ````````````
+
+function test(e) {
+    const authorization_data = new FormData(processedForms.donor.formElement)
+    for (var pair of authorization_data.entries()) {
+        console.log(pair[0] + ', ' + pair[1])
+    }
+}
 
 async function authorize(e) {
     e.preventDefault()
@@ -47,7 +55,7 @@ async function authorize(e) {
 function showServerResponse(response, infoElement) {
     infoElement.innerHTML = ''
     response.forEach((serverMessage) => {
-        if (!serverMessage.status !== 'ok') {
+        if (serverMessage.status !== 'ok') {
             console.log(serverMessage.message)
             infoElement.innerHTML += '<b>Error</b>' + serverMessage.message
             return
