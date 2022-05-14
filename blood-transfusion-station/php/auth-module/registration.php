@@ -136,18 +136,18 @@ $registration_data = [
 try {
     $register_statement = $db->prepare(SQL_ADD_DONOR);
     $register_statement->execute($registration_data);
-
-    $message = "registration successful";
-    $global_sm_log[] = [
-        "status" => "ok",
-        "message" => getServerMessage($message),
-        "from" => "auth-module/registration.php"
-    ];
 }
 catch (PDOException $e) {
     $message = "registration failed:<br>" . $e->getMessage();
     addErrorToLog($message, "auth-module/registration.php");
 }
+
+$message = "registration successful";
+$global_sm_log[] = [
+    "status" => "ok",
+    "message" => getServerMessage($message),
+    "from" => "auth-module/registration.php"
+];
 
 sendLogAsResponse();
 
