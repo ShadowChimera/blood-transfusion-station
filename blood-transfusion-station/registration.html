@@ -15,6 +15,9 @@
 
     <link rel="stylesheet" href="css/test.css">
 
+    <script src="/js/auth-module/check-authorization.js"></script>
+    <script src="/js/auth-module/do-after-auth-check.js"></script>
+    <script src="/js/auth-module/unauthorization-required.js"></script>
     <script defer type="module" src="/js/auth-module/registration.js"></script>
 </head>
 <body>
@@ -42,6 +45,7 @@
         <div class="form-info"></div>
 
         <input type="submit" id="donor-registration-button" class="button" value="Зарегистрироваться">
+        <a href="authorization.html" class="link">Авторизация</a>
     </form>
 
     <section class="result-container" id="common-server-answer-section">

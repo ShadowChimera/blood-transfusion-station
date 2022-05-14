@@ -12,10 +12,24 @@
 
     <title>Главная</title>
     <link rel="shortcut icon" href="/assets/images/icons/favicons/favicon.svg">
-
+    
     <link rel="stylesheet" href="css/test.css">
+
+    <script src="/js/auth-module/check-authorization.js"></script>
+    <script src="/js/auth-module/do-after-auth-check.js"></script>
+    <script src="/js/auth-module/logout.js"></script>
 </head>
 <body>
+
+    <header id="main-header">
+        <div class="authorization-status">
+            You are not logged in
+        </div>
+        
+        <button class="button" id="log-out-button" style="visibility: hidden;">Log out</button>
+    </header>
+
+    <script src="/js/page-content-module/header.js"></script>
 
     <h1>Навигация</h1>
     <nav class="main-nav">

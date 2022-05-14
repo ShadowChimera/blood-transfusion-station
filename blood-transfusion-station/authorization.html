@@ -15,6 +15,9 @@
 
     <link rel="stylesheet" href="css/test.css">
 
+    <script src="/js/auth-module/check-authorization.js"></script>
+    <script src="/js/auth-module/do-after-auth-check.js"></script>
+    <script src="/js/auth-module/unauthorization-required.js"></script>
     <script defer type="module" src="/js/auth-module/authorization.js"></script>
 </head>
 <body>
@@ -31,9 +34,17 @@
             <input type="password" name="password" id="donor-password-input" class="input" placeholder="Пароль">
         </div>
 
+        <label for="donor-remember-me-checkbox" class="label checkbox-container">
+            <input type="checkbox" name="remember-me" id="donor-remember-me-checkbox" class="checkbox">
+            <span class="label-text">
+                Запомнить меня
+            </span>
+        </label>
+
         <div class="form-info"></div>
 
         <input type="submit" id="donor-authorization-button" class="button" value="Войти">
+        <a href="registration.html" class="link">Регистрация</a>
     </form>
 
     <section class="result-container" id="common-server-answer-section">
