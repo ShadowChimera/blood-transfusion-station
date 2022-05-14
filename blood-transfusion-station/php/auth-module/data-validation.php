@@ -30,7 +30,6 @@ function isPasswordValid($password) {
 
 function isRegistrationDataValid($email, $phone, $password) {
     $isValid = true;
-    // $message = "";
 
     if (is_null($email) && is_null($phone)) {
         $message = "email or phone can't be null";
@@ -44,11 +43,9 @@ function isRegistrationDataValid($email, $phone, $password) {
     }
 
     if (!$isValid) {
-        // addErrorToLog($message, "auth-module/data-validation.php");
         return false;
     }
     
-    // $message = "";
     
     if (!isEmailValid($email)) {
         $message = "email is invalid";
@@ -67,13 +64,24 @@ function isRegistrationDataValid($email, $phone, $password) {
     }
 
     return $isValid;
-    
-    // if (!$isValid) {
-    //     // addErrorToLog($message, "auth-module/data-validation.php");
-    //     return false;
-    // }
+}
 
-    // return true;
+function isAuthorizationDataValid($login, $password) {
+    $isValid = true;
+
+    if (!isLoginValid($login)) {
+        $message = "login is invalid";
+        addErrorToLog($message, "auth-module/data-validation.php");
+        $isValid = false;
+    }
+    
+    if (!isPasswordValid($password)) {
+        $message = "password is invalid";
+        addErrorToLog($message, "auth-module/data-validation.php");
+        $isValid = false;
+    }
+
+    return $isValid;
 }
 
 ?>
