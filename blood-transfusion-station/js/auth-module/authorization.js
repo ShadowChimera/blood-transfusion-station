@@ -1,7 +1,7 @@
 'use strict'
 
 import { REQUEST_TYPES, sendAuthRequest } from './auth-request.js'
-import { processForm } from './form-processing.js'
+import { processForm } from './data-processing/form-processing.js'
 
 document.addEventListener('DOMContentLoaded', main)
 
@@ -14,21 +14,14 @@ function main() {
     )
 
     let processedForm = processForm(donor_authForm, authorize)
-    // let processedForm = processForm(donor_authForm, test)
     processedForms[processedForm.formName] = processedForm
 
-    // processedForm = processForm(hospital_authForm, register)
-    // forms[processForm.formName] = processForm
+    // TODO Determine hospitals authorization
+    // *    processedForm = processForm(hospital_authForm, authorize)
+    // *    forms[processForm.formName] = processedForm
 }
 
-// ````````````
-
-function test(e) {
-    const authorization_data = new FormData(processedForms.donor.formElement)
-    for (var pair of authorization_data.entries()) {
-        console.log(pair[0] + ', ' + pair[1])
-    }
-}
+// * ````````````
 
 async function authorize(e) {
     e.preventDefault()

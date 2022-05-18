@@ -42,7 +42,7 @@ const INPUT_STATES = {
 
 const customInputStates = []
 
-// ````````
+// * ````````
 
 let errorLog = ''
 

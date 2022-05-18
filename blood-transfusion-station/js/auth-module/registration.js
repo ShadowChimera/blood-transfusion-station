@@ -16,8 +16,9 @@ function main() {
     let processedForm = processForm(donor_regForm, register)
     processedForms[processedForm.formName] = processedForm
 
-    // processedForm = processForm(hospital_regForm, register)
-    // forms[processForm.formName] = processForm
+    // TODO Determine hospitals authorization
+    // *    processedForm = processForm(hospital_authForm, register)
+    // *    forms[processForm.formName] = processedForm
 }
 
 // ````````````
