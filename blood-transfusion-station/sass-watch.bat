@@ -1,1 +1,1 @@
-start /min sass --watch sass/:css/ --no-source-map --style compressed
+start /min sass --watch public/sass/:public/css/ --no-source-map --style compressed

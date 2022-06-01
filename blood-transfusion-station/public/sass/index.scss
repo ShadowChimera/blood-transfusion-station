@@ -1,0 +1,48 @@
+@import 'variables/_index.scss';
+
+*,
+*:after,
+*:before {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    padding: 1em;
+
+    font-family: $f-family-primary;
+    font-size: $f-size-primary;
+    font-weight: 400;
+    line-height: $f-height-primary;
+    color: $f-color-primary;
+}
+
+h1 {
+    margin: 0;
+    font-size: $f-size-header-1;
+    line-height: $f-height-header-1;
+}
+
+h2 {
+    margin: 0;
+    font-size: $f-size-header-2;
+    line-height: $f-height-header-2;
+}
+
+h3 {
+    margin: 0;
+    font-size: $f-size-header-3;
+    line-height: $f-height-header-3;
+}
+
+h4 {
+    margin: 0;
+    font-size: $f-size-header-4;
+    line-height: $f-height-header-4;
+}
+
+h5 {
+    margin: 0;
+    font-size: $f-size-header-5;
+    line-height: $f-height-header-5;
+}
