@@ -5,11 +5,12 @@ $em-color: #EC5863;
 
     &__header {
         display: grid;
-        grid-template-areas:    "avatar name"
+        grid-template-areas:    "avatar username"
                                 "avatar blood-group";
 
         grid-template-columns: auto 1fr;
-        gap: 1em;
+        align-items: center;
+        gap: .5rem 1rem;
 
         .avatar {
             grid-area: avatar;
@@ -20,42 +21,45 @@ $em-color: #EC5863;
             background-color: #ccc;
         }
 
-        .input {
-            grid-area: name;
+        .username {
+            grid-area: username;
+            font-size: 1.5rem;
+            font-weight: 500;
+            // padding: .25em 0;
 
-            width: fit-content;
-            min-width: 300px;
-
-            font-size: 1.25rem;
+            &.input {
+                width: fit-content;
+                min-width: 300px;
+    
+                // padding: .5rem 1rem;  
+                padding: 0;  
+            }
         }
 
-        .list#blood-group {
+        .blood-group-container {
             grid-area: blood-group;
 
-            display: flex;
-            align-items: flex-start;
-            gap: 1rem;
+            // .label {
+            //     color: #4285f4;
+            // }
 
-            .list__item {
-                // &:nth-child(n + 2) {
-                //     margin-top: .5em;
-                // }
-
+            .list {
                 display: flex;
-                flex-direction: column;
-                gap: .5em;
-            }
+                align-items: flex-start;
+                gap: 1rem;
 
-            .label {
-                color: $label-color;
-            }
+                .list__item {
+                    display: flex;
+                    flex-direction: column;
+                    gap: .5em;
+                }
 
-            .value {
-                color: $em-color;
-                font-size: 1.25em;
+                .value {
+                    color: $em-color;
+                    font-size: 1.25em;
+                }
             }
         }
+   
     }
-    
-
 }
