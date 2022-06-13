@@ -4,7 +4,7 @@
   "description": "Bachelor's degree project on \"Development of automation software for a blood transfusion station\"",
   "main": "index.js",
   "scripts": {
-	"start": "nodemon index.js",
+    "start": "nodemon index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -20,7 +20,8 @@
   "dependencies": {
     "express": "^4.18.1",
     "express-handlebars": "^6.0.6",
-    "hbs": "^4.2.0"
+    "hbs": "^4.2.0",
+    "mysql2": "^2.3.3"
   },
   "devDependencies": {
     "nodemon": "^2.0.16"

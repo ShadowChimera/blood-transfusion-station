@@ -1,0 +1,61 @@
+$label-color: #B0B6BF;
+$em-color: #EC5863;
+
+.profile {
+
+    &__header {
+        display: grid;
+        grid-template-areas:    "avatar name"
+                                "avatar blood-group";
+
+        grid-template-columns: auto 1fr;
+        gap: 1em;
+
+        .avatar {
+            grid-area: avatar;
+
+            width: 112px;
+            height: 112px;
+    
+            background-color: #ccc;
+        }
+
+        .input {
+            grid-area: name;
+
+            width: fit-content;
+            min-width: 300px;
+
+            font-size: 1.25rem;
+        }
+
+        .list#blood-group {
+            grid-area: blood-group;
+
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+
+            .list__item {
+                // &:nth-child(n + 2) {
+                //     margin-top: .5em;
+                // }
+
+                display: flex;
+                flex-direction: column;
+                gap: .5em;
+            }
+
+            .label {
+                color: $label-color;
+            }
+
+            .value {
+                color: $em-color;
+                font-size: 1.25em;
+            }
+        }
+    }
+    
+
+}

@@ -1,4 +1,6 @@
-@import 'variables/_index.scss';
+// ? Rubik
+@import url('https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,400;0,500;0,700;1,400;1,500;1,700&display=swap');
+
 
 *,
 *:after,
@@ -6,43 +8,155 @@
     box-sizing: border-box;
 }
 
+$bg-color-primary: #FAFBFD;
+$f-color-primary: #1F2C37;
+$f-color-active: #4285F4;
+$f-family-primary: 'Rubik', sans-serif;
+
+$color-active: #4285F4;
+
 body {
+    min-height: 100vh;
+
     margin: 0;
-    padding: 1em;
+    padding: 0;
+
+    background-color: $bg-color-primary;
 
     font-family: $f-family-primary;
-    font-size: $f-size-primary;
-    font-weight: 400;
-    line-height: $f-height-primary;
+    font-size: 1rem;
     color: $f-color-primary;
 }
 
-h1 {
-    margin: 0;
-    font-size: $f-size-header-1;
-    line-height: $f-height-header-1;
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+
+    padding: 1rem;
 }
 
-h2 {
-    margin: 0;
-    font-size: $f-size-header-2;
-    line-height: $f-height-header-2;
+@media (max-width: 1200px) {
+    .container {
+        max-width: 970px;
+    }
+}
+@media (max-width: 992px) {
+    .container {
+        max-width: 750px;
+    }
+}
+@media (max-width: 767px) {
+    .container {
+        max-width: none;
+    }
 }
 
-h3 {
-    margin: 0;
-    font-size: $f-size-header-3;
-    line-height: $f-height-header-3;
+
+$separator-color-primary: #F0F5FC;
+
+.main-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+
+    padding: 2em;
+
+    border-bottom: 1px solid $separator-color-primary;
+
+    .logo {
+        display: inline-block;
+
+        color: $f-color-primary;
+        text-decoration: none;
+
+        &__upper-text {
+            font-weight: 700;
+            font-size: 1.25rem;
+        }
+        &__lower-text {
+            font-size: 1rem;
+            color: #B0B6BF;
+        }
+    }
+
+    .container {
+        flex: 1 1 0;
+
+        display: flex;
+        justify-content: center;
+    }
 }
 
-h4 {
-    margin: 0;
-    font-size: $f-size-header-4;
-    line-height: $f-height-header-4;
+.main-nav {
+    flex: 1 1 0;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+
+    .info-nav {
+        flex: 1 1 0;
+        
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 1rem;
+
+        margin: 0 auto;
+    }
+
+    .list {
+        &__item {
+            .link {
+                color: $f-color-primary;
+                text-decoration: none;
+
+                &:hover,
+                &.active {
+                    color: $f-color-active;
+                }
+                &.active {
+                    font-weight: 500;
+                }
+            }
+        }
+    }
 }
 
-h5 {
+.list {
+    list-style: none;
     margin: 0;
-    font-size: $f-size-header-5;
-    line-height: $f-height-header-5;
+    padding: 0;
+}
+
+
+.link {
+    // color: 
+}
+
+$border-color-primary: #DBDDF1;
+
+.input {
+    padding: .5em 1em;
+    font-family: $f-family-primary;
+    font-size: 1rem;
+    color: $f-color-primary;
+
+    border: 1px solid $border-color-primary;
+    border-radius: .2em;
+
+    background-color: transparent;
+
+    &:focus-visible {
+        outline: none;
+        border-color: $color-active;
+    }
+
+    &.secondary {
+        border-width: 0;
+        border-bottom-width: 1px;
+        border-radius: 0;
+    }
 }

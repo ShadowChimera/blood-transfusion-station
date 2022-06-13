@@ -1,8 +1,12 @@
 'use strict'
 
+global.__basedir = __dirname
+
+// Модули ===================================================================
+
 const express = require('express')
 let expressHbs = require('express-handlebars')
-expressHbs = require(`${__dirname}/modules/hbs/helpers`)(expressHbs)
+expressHbs = require(`${global.__basedir}/modules/hbs/helpers`)(expressHbs)
 
 const hbs = require('hbs')
 
@@ -11,7 +15,7 @@ const app = express()
 app.set('view engine', 'hbs')
 app.engine('hbs', expressHbs.engine)
 
-hbs.registerPartials(`${__dirname}/views/partials`)
+hbs.registerPartials(`${global.__basedir}/views/partials`)
 
 // Парсеры ===================================================================
 
@@ -45,23 +49,41 @@ app.get('/', (req, res) => {
     res.render('home.hbs', options)
 })
 
-app.use(express.static(`${__dirname}/public`))
+app.use(express.static(`${global.__basedir}/public`))
 
-// app.get('/(sign-up|registration)', (req, res) => {
-//     res.status(200).type('text/html')
+app.get('/profile', (req, res) => {
+    res.status(200).type('text/html')
+    res.sendFile('public/html/donor/profile.html', { root: global.__basedir })
+})
 
-//     const options = getDefaultOptions('Регистрация')
+app.get(/\/(sign-up|registration)/, (req, res) => {
+    res.status(200).type('text/html')
 
-//     res.render('sign-up.hbs', options)
-// })
+    const options = getDefaultOptions('Регистрация')
 
-// app.get('/(sign-in|authorization)', (req, res) => {
-//     res.status(200).type('text/html')
+    options.mainNav = {
+        activeNavElement: '/sign-up',
+    }
 
-//     const options = getDefaultOptions('Вход')
+    res.render('sign-up.hbs', options)
+})
 
-//     res.render('sign-in.hbs', options)
-// })
+app.post(/\/(sign-up|registration)/, urlencodedParser, (req, res) => {
+    const signUp = require(`${global.__basedir}/api/auth/sign-up.js`)
+    signUp(req, res)
+})
+
+app.get(/\/(sign-in|authorization)/, (req, res) => {
+    res.status(200).type('text/html')
+
+    const options = getDefaultOptions('Вход')
+
+    options.mainNav = {
+        activeNavElement: '/sign-in',
+    }
+
+    res.render('sign-in.hbs', options)
+})
 
 app.use((req, res, next) => {
     res.sendStatus(404)
