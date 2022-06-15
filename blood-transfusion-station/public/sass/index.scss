@@ -307,4 +307,8 @@ $button-color-hover: #3D78D7;
     &:active {
         box-shadow: 0px 3px 6px rgba(31, 44, 55, 0.1);
     }
+
+    &.flat {
+        box-shadow: none !important;
+    }
 }
