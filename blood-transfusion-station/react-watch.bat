@@ -1,1 +1,1 @@
-start /min npx babel --watch react-src --out-dir public/js --presets react-app/prod
+start /min npx babel --watch public/react/dev --out-dir public/react/prod --presets react-app/prod

@@ -55,6 +55,14 @@ app.use(express.static(`${global.__basedir}/public`))
 
 app.use(donorRouter)
 
+app.get('/test', (req, res) => {
+    res.status(200).type('text/html')
+
+    res.sendFile(`public/html/${global.__user.type}/home.html`, {
+        root: global.__basedir,
+    })
+})
+
 app.get('/profile', (req, res) => {
     if (!global.__user.authorized) {
         res.redirect('/sign-in')
