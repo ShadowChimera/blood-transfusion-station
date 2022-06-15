@@ -34,43 +34,47 @@ const USER_TYPES = {
     head: 4,
 }
 
-const user = {
+global.__user = {
     authorized: true,
     type: 'donor',
 }
 
 //  Маршрутизация ===================================================================
 
+const donorRouter = require(`${global.__basedir}/modules/routers/donor.js`)
+
 app.get('/', (req, res) => {
     res.status(200).type('text/html')
 
-    res.sendFile(`public/html/${user.type}/home.html`, {
+    res.sendFile(`public/html/${global.__user.type}/home.html`, {
         root: global.__basedir,
     })
 })
 
 app.use(express.static(`${global.__basedir}/public`))
 
+app.use(donorRouter)
+
 app.get('/profile', (req, res) => {
-    if (!user.authorized) {
+    if (!global.__user.authorized) {
         res.redirect('/sign-in')
         return
     }
 
     res.status(200).type('text/html')
-    res.sendFile(`public/html/${user.type}/profile.html`, {
+    res.sendFile(`public/html/${global.__user.type}/profile.html`, {
         root: global.__basedir,
     })
 })
 
 app.get('/sign-up', (req, res) => {
-    if (user.authorized) {
+    if (global.__user.authorized) {
         res.redirect('/profile')
         return
     }
 
     res.status(200).type('text/html')
-    res.sendFile(`public/html/${user.type}/sign-up.html`, {
+    res.sendFile(`public/html/${global.__user.type}/sign-up.html`, {
         root: global.__basedir,
     })
 })
@@ -81,13 +85,13 @@ app.post('/sign-up', urlencodedParser, (req, res) => {
 })
 
 app.get('/sign-in', (req, res) => {
-    if (user.authorized) {
+    if (global.__user.authorized) {
         res.redirect('/profile')
         return
     }
 
     res.status(200).type('text/html')
-    res.sendFile(`public/html/${user.type}/sign-in.html`, {
+    res.sendFile(`public/html/${global.__user.type}/sign-in.html`, {
         root: global.__basedir,
     })
 })

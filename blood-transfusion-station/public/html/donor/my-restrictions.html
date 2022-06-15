@@ -11,7 +11,7 @@
     <meta http-equiv="expires" content="0" />
     <!-- ! /debug -->
 
-    <title>Особистий кабінет</title>
+    <title>Мої обмеження</title>
 
     <link rel="shortcut icon" href="/assets/images/icons/favicons/favicon.svg">
 
@@ -74,7 +74,7 @@
     </a>
     <ul class="list">
         <li class="list__item">
-            <a href="/profile" class="link active">
+            <a href="/profile" class="link">
                 <span class="material-symbols-outlined">
                     person
                 </span>
@@ -82,7 +82,7 @@
             </a>
         </li>
         <li class="list__item">
-            <a href="/my-restrictions" class="link">
+            <a href="/my-restrictions" class="link active">
                 <span class="material-symbols-outlined">
                     block
                 </span>
@@ -130,94 +130,77 @@
 <div class="main-content profile">
     <div class="container">
         <header class="profile__header" id="profile-header-root">
-            <div class="avatar"></div>
-                <!-- <input type="text" name="name" id="input-name" class="input secondary" value="Бабенко Олексій" placeholder="Ваше ім'я"> -->
-            <div class="username">Бабенко Олексій</div>
-            <div class="blood-group-container">
-                <div class="label">Група крові</div>
-                <ul id="blood-group" class="list">
-                    <li class="list__item">
-                        <span class="value">A (II)</span>
-                    </li>
-                    <li class="list__item">
-                        <span class="value">Rh+</span>
-                    </li>
-                    <li class="list__item">
-                        <span class="value">Kell+</span>
-                    </li>
-                </ul>
-            </div>
+            
         </header>
        
-        <section class="section">
-            <h1 class="title">Контактна інформація</h1>
+        <ul class="list history">
+            <header class="history__header history__item">
+                <div class="header__item">
+                    <div class="value">Назва обмеження</div>
+                </div>
+                <div class="header__item">
+                    <div class="value">Час, що залишився</div>
+                </div>
+                <div class="header__item">
+                    <div class="value">Початкова дата</div>
+                </div>
+                <div class="header__item">
+                    <div class="value">Кінцева дата</div>
+                </div>
+            </header>
 
-            <ul class="list">
-                <li class="list__item">
-                    <div class="input-container">
-                        <span class="material-symbols-outlined">
-                            mail
-                        </span>
-                        <input type="email" name="email" class="input" value="alexey22042001@gmail.com" placeholder="Пошта">
-                    </div>
-                </li>
-                <li class="list__item">
-                    <div class="input-container">
-                        <span class="material-symbols-outlined">
-                            phone
-                        </span>
-                        <input type="phone" name="phone" class="input" value="+380685494521" placeholder="Телефон">
-                    </div>
-                </li>
-            </ul>
-        </section>
+            <li class="list__item history__item">
+                <div class="name">Гепатит А</div>
+                <div class="remaining-time">
+                    <span class="material-symbols-outlined">
+                        timer
+                    </span>
+                    <span class="value">7 місяців</span>    
+                </div>
+                <div class="start-time">
+                    <span class="material-symbols-outlined">
+                        event_upcoming
+                    </span>
+                    <span class="value">15.01.2022</span>
+                </div>
+                <div class="end-time">
+                    <span class="material-symbols-outlined">
+                        event_available
+                    </span>
+                    <span class="value">15.01.2023</span>
+                </div>
+            </li>
 
-        <section class="section">
-            <h1 class="title">Зміна паролю</h1>
-
-            <ul class="list">
-                <li class="list__item">
-                    <div class="input-container">
-                        <span class="material-symbols-outlined">
-                            lock_open
-                        </span>
-                        <input type="password" name="old-password" class="input" placeholder="Старий пароль">
-                    </div>
-                </li>
-                <li class="list__item">
-                    <div class="input-container">
-                        <span class="material-symbols-outlined">
-                            lock
-                        </span>
-                        <input type="password" name="password" class="input" placeholder="Новий пароль">
-                    </div>
-                </li>
-                <li class="list__item">
-                    <div class="input-container">
-                        <span class="material-symbols-outlined">
-                            lock
-                        </span>
-                        <input type="password" name="repeat-password" class="input" placeholder="Повтор паролю">
-                    </div>
-                </li>
-            </ul>
-        </section>
+            <li class="list__item history__item">
+                <div class="name">Лазерна операція на очах</div>
+                <div class="remaining-time">
+                    <span class="material-symbols-outlined">
+                        timer
+                    </span>
+                    <span class="value">3 дні</span>    
+                </div>
+                <div class="start-time">
+                    <span class="material-symbols-outlined">
+                        event_upcoming
+                    </span>
+                    <span class="value">17.05.2022</span>
+                </div>
+                <div class="end-time">
+                    <span class="material-symbols-outlined">
+                        event_available
+                    </span>
+                    <span class="value">18.06.2022</span>
+                </div>
+            </li>
+        </ul>
 
         <div class="control-buttons">
-            <button class="button" name="reset">
+            <button class="button" name="add">
                 <span class="material-symbols-outlined">
-                    restart_alt
+                    add
                 </span>
                 <span class="button-text">
-                    Скинути
-                </span>
-            </button>
-            <button class="button" name="save">
-                <span class="material-symbols-outlined">
-                    upgrade
-                </span>
-                <span class="button-text">
-                    Зберегти
+                    Додати обмеження
                 </span>
             </button>
         </div>
@@ -226,4 +209,4 @@
 </div>
 
 </body>
-</html>
+</html> -->

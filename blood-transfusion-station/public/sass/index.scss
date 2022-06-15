@@ -43,6 +43,7 @@ body {
 
 .container {
     max-width: 1200px;
+    width: fit-content;
     margin: 0 auto;
 
     padding: 1rem;
@@ -68,6 +69,8 @@ body {
 $separator-color-primary: #F0F5FC;
 
 .main-header {
+    grid-area: main-header;
+
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -138,125 +141,6 @@ $separator-color-primary: #F0F5FC;
     }
 }
 
-$side-bar-bg-color: #F0F5FC;
-
-.side-bar {
-    display: flex;
-    flex-direction: column;
-    
-    position: fixed;
-    left: 0;
-    top: 0;
-    bottom: 0;
-    z-index: 999;
-
-    padding: 2rem;
-
-    background-color: $side-bar-bg-color;
-
-    .material-symbols-outlined {
-        font-variation-settings:
-                                'FILL' 1,
-                                'wght' 400,
-                                'GRAD' 0,
-                                'opsz' 48;
-    }
-
-    .logo {
-        display: block;
-        margin-bottom: 5rem;
-    }
-
-    .list {
-        flex: 1 1 0;
-
-        display: flex;
-        flex-direction: column;
-        gap: 1em;
-
-        // height: 100%;
-
-        .spacer {
-            flex: 1 1 0;
-        }
-    }
-
-    .link {
-        display: flex;
-        align-items: center;
-        gap: 1em;
-
-        padding: 1em 1.5em;
-        color: $f-color-primary;
-        text-decoration: none;
-
-        border: none;
-        border-left: .25em solid transparent;
-        border-radius: 0 .25em .25em 0;
-
-        background-color: transparent;
-
-        .link-text {
-            opacity: $opacity-high-emphasis;
-        }
-
-        &:active,
-        &.active {
-            color: #4285F4;
-            font-weight: 500;
-
-            background-color: #DBE8FB;
-            border-color: #F08189;
-
-            .link-text {
-                opacity: $opacity-highest-emphasis;
-            }
-
-            .material-symbols-outlined {
-                opacity: $opacity-highest-emphasis;
-            }
-        }
-        
-        &:not(.active):hover {
-            color: #70A3F6;
-            // font-weight: 500;
-
-            background-color: #E8EFFC;
-            border-color: #f0818899;
-
-            .link-text {
-                opacity: $opacity-highest-emphasis;
-            }
-
-            .material-symbols-outlined {
-                opacity: $opacity-high-emphasis;
-            }
-        }
-    }
-
-    .button {
-        width: 100%;
-        margin: 0 auto;
-
-        box-shadow: none !important;
-
-        background-color: transparent;
-        border: 1px solid #CE525C;
-        color: #B94D58;
-        font-weight: 500;
-
-        &:hover {
-            background-color: #CE525C;
-            color: #fff;
-        }
-
-        // background-color: #CE525C;
-
-        // &:hover {
-        //     background-color: #B94D58;
-        // }
-    }
-}
 
 .list {
     list-style: none;
