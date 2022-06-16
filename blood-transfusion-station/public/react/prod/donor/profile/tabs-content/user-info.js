@@ -308,8 +308,8 @@ export var UserInfo = function (_React$Component) {
             isEditable: false,
             userInfo: {
                 username: '',
-                avatarSrc: props.avatarSrc,
-                bloodGroup: props.bloodGroup,
+                avatarSrc: '',
+                bloodGroup: '',
                 phone: '',
                 email: '',
                 oldPassword: '',
@@ -319,26 +319,63 @@ export var UserInfo = function (_React$Component) {
             backup: {}
         };
 
-        for (var key in _this.state.userInfo) {
-            _this.state.backup[key] = _this.state.userInfo[key];
-        }
+        _this.loadUserInfo();
         return _this;
     }
 
     _createClass(UserInfo, [{
+        key: "loadUserInfo",
+        value: function loadUserInfo() {
+            var _this2 = this;
+
+            fetch('/api/donor/user-info/get-user-info', {
+                method: 'GET',
+                headers: {
+                    Accept: 'application/json'
+                }
+            }).then(function (response) {
+                return response.json();
+            }).then(function (data) {
+                console.log(data);
+
+                data.result.oldPassword = '';
+                data.result.password = '';
+                data.result.repeatPassword = '';
+
+                var backup = {};
+
+                for (var key in data.result) {
+                    backup[key] = data.result[key];
+                }
+
+                _this2.setState({
+                    userInfo: data.result,
+                    backup: backup
+                });
+            });
+        }
+    }, {
         key: "handleInputChange",
         value: function handleInputChange(event, inputName) {
             var curUserInfo = this.state.userInfo;
-            var newUserInfo = {
-                username: curUserInfo.username,
-                avatarSrc: curUserInfo.avatarSrc,
-                bloodGroup: curUserInfo.bloodGroup,
-                phone: this.state.userInfo.phone,
-                email: this.state.userInfo.email,
-                oldPassword: this.state.userInfo.oldPassword,
-                password: this.state.userInfo.password,
-                repeatPassword: this.state.userInfo.repeatPassword
-            };
+
+            var newUserInfo = {};
+
+            for (var key in curUserInfo) {
+                newUserInfo[key] = curUserInfo[key];
+            }
+
+            // const newUserInfo = {
+            //     username: curUserInfo.username,
+            //     avatarSrc: curUserInfo.avatarSrc,
+            //     bloodGroup: curUserInfo.bloodGroup,
+            //     phone: curUserInfo.phone,
+            //     email: curUserInfo.email,
+            //     oldPassword: curUserInfo.oldPassword,
+            //     password: curUserInfo.password,
+            //     repeatPassword: curUserInfo.repeatPassword,
+            // }
+
             newUserInfo[inputName] = event.target.value;
 
             this.setState({
@@ -365,7 +402,7 @@ export var UserInfo = function (_React$Component) {
     }, {
         key: "render",
         value: function render() {
-            var _this2 = this;
+            var _this3 = this;
 
             return React.createElement(
                 "div",
@@ -376,14 +413,14 @@ export var UserInfo = function (_React$Component) {
                     avatarSrc: this.state.userInfo.avatarSrc,
                     bloodGroup: this.state.userInfo.bloodGroup,
                     onInputChange: function onInputChange(event, inputName) {
-                        _this2.handleInputChange(event, inputName);
+                        _this3.handleInputChange(event, inputName);
                     }
                 }),
                 React.createElement(ContactsSection, {
                     email: this.state.userInfo.email,
                     phone: this.state.userInfo.phone,
                     onInputChange: function onInputChange(event, inputName) {
-                        _this2.handleInputChange(event, inputName);
+                        _this3.handleInputChange(event, inputName);
                     }
                 }),
                 React.createElement(PasswordSection, {
@@ -391,15 +428,15 @@ export var UserInfo = function (_React$Component) {
                     password: this.state.userInfo.password,
                     repeatPassword: this.state.userInfo.repeatPassword,
                     onInputChange: function onInputChange(event, inputName) {
-                        _this2.handleInputChange(event, inputName);
+                        _this3.handleInputChange(event, inputName);
                     }
                 }),
                 React.createElement(ControlPanel, {
                     onResetClick: function onResetClick(event) {
-                        _this2.handleResetClick(event);
+                        _this3.handleResetClick(event);
                     },
                     onSaveClick: function onSaveClick(event) {
-                        _this2.handleSaveClick(event);
+                        _this3.handleSaveClick(event);
                     }
                 })
             );

@@ -184,16 +184,91 @@ function SectionItem(props) {
         )
     );
 }
+
+function getToday() {
+    var today = new Date();
+    var dd = String(today.getDate()).padStart(2, '0');
+    var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+    var yyyy = today.getFullYear();
+
+    today = dd + '.' + mm + '.' + yyyy;
+    return today;
+}
+
 function ListItem(props) {
+    var className = 'list__item';
+    var dateInput = '';
+
+    if (props.isChecked) {
+        className += ' checked';
+        dateInput = React.createElement("input", {
+            className: "input-datetime",
+            type: "datetime",
+            name: "startTime",
+            value: getToday()
+        });
+    }
+
     return React.createElement(
         "li",
-        { className: "list__item", onClick: function onClick(event) {
-                return props.onClick(event);
-            } },
+        {
+            className: className,
+            onClick: function onClick(event) {
+                return props.onClick(event, props.name, getToday());
+            }
+        },
         React.createElement(
             "div",
             { className: "name" },
             props.name
+        ),
+        dateInput
+    );
+}
+
+function SMControlPanel(props) {
+    return React.createElement(
+        "div",
+        { className: "control-buttons" },
+        React.createElement(
+            "button",
+            {
+                className: "button flat",
+                name: "cancel",
+                onClick: function onClick(event) {
+                    return props.onCancelClick(event);
+                }
+            },
+            React.createElement(
+                "span",
+                { className: "material-symbols-outlined" },
+                "close"
+            ),
+            React.createElement(
+                "span",
+                { className: "button-text" },
+                "\u0412\u0456\u0434\u043C\u0456\u043D\u0438\u0442\u0438"
+            )
+        ),
+        React.createElement(
+            "button",
+            {
+                className: "button flat",
+                name: "confirm",
+                onClick: function onClick(event) {
+                    return props.onConfirmClick(event);
+                }
+            },
+            React.createElement(
+                "span",
+                { className: "material-symbols-outlined" },
+                "check"
+            ),
+            React.createElement(
+                "span",
+                { className: "button-text" },
+                "\u041F\u0456\u0434\u0442\u0432\u0435\u0440\u0434\u0438\u0442\u0438"
+            )
         )
     );
 }
@@ -208,7 +283,7 @@ var SelectionMenu = function (_React$Component2) {
 
         _this3.state = {
             currentSection: null,
-            selected: []
+            selected: {}
         };
 
         _this3.restrictions = {
@@ -423,17 +498,66 @@ var SelectionMenu = function (_React$Component2) {
         }
     }, {
         key: "handleRestrictionClick",
-        value: function handleRestrictionClick(event, name) {
-            var newSelected = this.state.selected.slice();
+        value: function handleRestrictionClick(event, name, date) {
+            if (event.target.tagName.toLowerCase() === 'input') {
+                return;
+            }
 
-            if (newSelected.includes(name)) {
-                newSelected.splice(newSelected.indexOf(name), 1);
+            var newSelected = {};
+
+            for (var key in this.state.selected) {
+                newSelected[key] = this.state.selected[key];
+            }
+
+            if (Object.keys(newSelected).includes(name)) {
+                // newSelected.splice(newSelected.indexOf(name), 1)
+                delete newSelected[name];
             } else {
-                newSelected.push(name);
+                newSelected[name] = date;
             }
 
             this.setState({
                 selected: newSelected
+            });
+        }
+    }, {
+        key: "handleConfirmClick",
+        value: function handleConfirmClick(event) {
+            fetch('/api/donor/restrictions/add-restrictions', {
+                method: 'POST',
+                headers: {
+                    Accept: 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(this.state.selected)
+            }).then(function (response) {
+                return response.json();
+            }).then(function (data) {
+                console.log(data);
+            });
+
+            this.resetState();
+            this.props.onConfirm(event);
+        }
+    }, {
+        key: "handleCancelClick",
+        value: function handleCancelClick(event) {
+            this.resetState();
+            this.props.onCancel(event);
+        }
+    }, {
+        key: "handleBackClick",
+        value: function handleBackClick(event) {
+            this.setState({
+                currentSection: null
+            });
+        }
+    }, {
+        key: "resetState",
+        value: function resetState() {
+            this.setState({
+                currentSection: null,
+                selected: {}
             });
         }
     }, {
@@ -453,10 +577,17 @@ var SelectionMenu = function (_React$Component2) {
         value: function renderListItem(name) {
             var _this5 = this;
 
+            var isChecked = false;
+
+            if (Object.keys(this.state.selected).includes(name)) {
+                isChecked = true;
+            }
+
             return React.createElement(ListItem, {
                 name: name,
-                onClick: function onClick(event) {
-                    return _this5.handleRestrictionClick(event, name);
+                isChecked: isChecked,
+                onClick: function onClick(event, name, date) {
+                    return _this5.handleRestrictionClick(event, name, date);
                 }
             });
         }
@@ -466,7 +597,7 @@ var SelectionMenu = function (_React$Component2) {
             var _this6 = this;
 
             var list = null;
-            var title = null;
+            var header = null;
 
             var curSection = this.state.currentSection;
 
@@ -474,23 +605,58 @@ var SelectionMenu = function (_React$Component2) {
                 list = this.restrictions[curSection].map(function (restriction) {
                     return _this6.renderListItem(restriction.name);
                 });
-                title = curSection;
+                header = React.createElement(
+                    "header",
+                    { className: "header restrictions__header" },
+                    React.createElement(
+                        "button",
+                        {
+                            className: "button simple round",
+                            name: "back",
+                            onClick: function onClick(event) {
+                                return _this6.handleBackClick(event);
+                            }
+                        },
+                        React.createElement(
+                            "span",
+                            { className: "material-symbols-outlined" },
+                            "arrow_back"
+                        )
+                    ),
+                    React.createElement(
+                        "span",
+                        { className: "header__text" },
+                        curSection
+                    )
+                );
             } else {
                 list = Object.keys(this.restrictions).map(function (section) {
                     return _this6.renderSectionItem(section);
                 });
-                title = 'Оберіть секцію';
+                header = React.createElement(
+                    "header",
+                    { className: "header restrictions__header" },
+                    React.createElement(
+                        "span",
+                        { className: "header__text" },
+                        "\u041E\u0431\u0435\u0440\u0456\u0442\u044C \u0441\u0435\u043A\u0446\u0456\u044E"
+                    )
+                );
             }
 
             return React.createElement(
                 "ul",
-                { className: "list restrictions" },
-                React.createElement(
-                    "header",
-                    { className: "restrictions__header" },
-                    title
-                ),
-                list
+                { className: "list secondary restrictions" },
+                header,
+                list,
+                React.createElement(SMControlPanel, {
+                    onCancelClick: function onCancelClick(event) {
+                        return _this6.handleCancelClick(event);
+                    },
+                    onConfirmClick: function onConfirmClick(event) {
+                        return _this6.handleConfirmClick(event);
+                    }
+                })
             );
         }
     }]);
@@ -508,18 +674,10 @@ export var MyRestrictions = function (_React$Component3) {
 
         _this7.state = {
             addMode: false,
-            restrictions: [{
-                name: 'Гепатит А',
-                remainingTime: '7 місяців',
-                startTime: '15.01.2022',
-                endTime: '15.01.2023'
-            }, {
-                name: 'Лазерна операція на очах',
-                remainingTime: '3 дні',
-                startTime: '17.05.2022',
-                endTime: '18.06.2022'
-            }]
+            restrictions: []
         };
+
+        _this7.loadRestrictions();
         return _this7;
     }
 
@@ -534,15 +692,55 @@ export var MyRestrictions = function (_React$Component3) {
         key: "handleRemoveClick",
         value: function handleRemoveClick(event, name) {}
     }, {
+        key: "handleCancelAdding",
+        value: function handleCancelAdding(event) {
+            this.setState({
+                addMode: false
+            });
+        }
+    }, {
+        key: "handleConfirmAdding",
+        value: function handleConfirmAdding(event) {
+            this.loadRestrictions();
+        }
+    }, {
+        key: "loadRestrictions",
+        value: function loadRestrictions() {
+            var _this8 = this;
+
+            fetch('/api/donor/restrictions/get-restrictions', {
+                method: 'GET',
+                headers: {
+                    Accept: 'application/json'
+                }
+            }).then(function (response) {
+                return response.json();
+            }).then(function (data) {
+                console.log(data);
+
+                _this8.setState({
+                    addMode: false,
+                    restrictions: data.result
+                });
+            });
+        }
+    }, {
         key: "render",
         value: function render() {
-            var _this8 = this;
+            var _this9 = this;
 
             if (this.state.addMode) {
                 return React.createElement(
                     "div",
                     { className: "container" },
-                    React.createElement(SelectionMenu, null)
+                    React.createElement(SelectionMenu, {
+                        onCancel: function onCancel(event) {
+                            return _this9.handleCancelAdding(event);
+                        },
+                        onConfirm: function onConfirm(event) {
+                            _this9.handleConfirmAdding(event);
+                        }
+                    })
                 );
             }
 
@@ -552,15 +750,15 @@ export var MyRestrictions = function (_React$Component3) {
                 React.createElement(History, {
                     restrictions: this.state.restrictions,
                     onAddClick: function onAddClick(event) {
-                        return _this8.handleAddClick(event);
+                        return _this9.handleAddClick(event);
                     },
                     onRemoveClick: function onRemoveClick(event, name) {
-                        return _this8.handleRemoveClick(event, name);
+                        return _this9.handleRemoveClick(event, name);
                     }
                 }),
                 React.createElement(ControlPanel, {
                     onAddClick: function onAddClick(event) {
-                        return _this8.handleAddClick(event);
+                        return _this9.handleAddClick(event);
                     }
                 })
             );

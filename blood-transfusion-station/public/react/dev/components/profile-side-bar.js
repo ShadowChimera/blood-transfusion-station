@@ -65,7 +65,10 @@ export class SideBar extends React.Component {
 
                     <li key="spacer" className="spacer"></li>
                     <li key="logoutButton" className="list__item">
-                        <button name="logout" className="button">
+                        <button
+                            name="logout"
+                            className="button secondary scolor"
+                        >
                             <span className="material-symbols-outlined">
                                 logout
                             </span>

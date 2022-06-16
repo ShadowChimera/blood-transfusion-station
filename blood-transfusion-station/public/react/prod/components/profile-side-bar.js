@@ -102,7 +102,10 @@ export var SideBar = function (_React$Component) {
                         { key: 'logoutButton', className: 'list__item' },
                         React.createElement(
                             'button',
-                            { name: 'logout', className: 'button' },
+                            {
+                                name: 'logout',
+                                className: 'button secondary scolor'
+                            },
                             React.createElement(
                                 'span',
                                 { className: 'material-symbols-outlined' },

@@ -188,8 +188,8 @@ export class UserInfo extends React.Component {
             isEditable: false,
             userInfo: {
                 username: '',
-                avatarSrc: props.avatarSrc,
-                bloodGroup: props.bloodGroup,
+                avatarSrc: '',
+                bloodGroup: '',
                 phone: '',
                 email: '',
                 oldPassword: '',
@@ -199,23 +199,59 @@ export class UserInfo extends React.Component {
             backup: {},
         }
 
-        for (let key in this.state.userInfo) {
-            this.state.backup[key] = this.state.userInfo[key]
-        }
+        this.loadUserInfo()
+    }
+
+    loadUserInfo() {
+        fetch('/api/donor/user-info/get-user-info', {
+            method: 'GET',
+            headers: {
+                Accept: 'application/json',
+            },
+        })
+            .then((response) => {
+                return response.json()
+            })
+            .then((data) => {
+                console.log(data)
+
+                data.result.oldPassword = ''
+                data.result.password = ''
+                data.result.repeatPassword = ''
+
+                const backup = {}
+
+                for (let key in data.result) {
+                    backup[key] = data.result[key]
+                }
+
+                this.setState({
+                    userInfo: data.result,
+                    backup: backup,
+                })
+            })
     }
 
     handleInputChange(event, inputName) {
         const curUserInfo = this.state.userInfo
-        const newUserInfo = {
-            username: curUserInfo.username,
-            avatarSrc: curUserInfo.avatarSrc,
-            bloodGroup: curUserInfo.bloodGroup,
-            phone: this.state.userInfo.phone,
-            email: this.state.userInfo.email,
-            oldPassword: this.state.userInfo.oldPassword,
-            password: this.state.userInfo.password,
-            repeatPassword: this.state.userInfo.repeatPassword,
+
+        const newUserInfo = {}
+
+        for (let key in curUserInfo) {
+            newUserInfo[key] = curUserInfo[key]
         }
+
+        // const newUserInfo = {
+        //     username: curUserInfo.username,
+        //     avatarSrc: curUserInfo.avatarSrc,
+        //     bloodGroup: curUserInfo.bloodGroup,
+        //     phone: curUserInfo.phone,
+        //     email: curUserInfo.email,
+        //     oldPassword: curUserInfo.oldPassword,
+        //     password: curUserInfo.password,
+        //     repeatPassword: curUserInfo.repeatPassword,
+        // }
+
         newUserInfo[inputName] = event.target.value
 
         this.setState({

@@ -10,6 +10,8 @@ import { Header } from '../../components/header.js';
 import { SideBar } from '../../components/profile-side-bar.js';
 import { UserInfo } from './tabs-content/user-info.js';
 import { MyRestrictions } from './tabs-content/my-restrictions.js';
+import { MyDonations } from './tabs-content/my-donations.js';
+import { MyTests } from './tabs-content/my-tests.js';
 
 var Profile = function (_React$Component) {
     _inherits(Profile, _React$Component);
@@ -72,6 +74,18 @@ var Profile = function (_React$Component) {
             });
         }
     }, {
+        key: 'handleLinkForTestClick',
+        value: function handleLinkForTestClick(event, link, id) {
+            event.preventDefault();
+            console.log(link);
+        }
+    }, {
+        key: 'handleTestClick',
+        value: function handleTestClick(event, test) {
+            // event.preventDefault()
+            console.log(test);
+        }
+    }, {
         key: 'render',
         value: function render() {
             var _this2 = this;
@@ -84,6 +98,20 @@ var Profile = function (_React$Component) {
                     break;
                 case '/my-restrictions':
                     mainContent = React.createElement(MyRestrictions, null);
+                    break;
+                case '/my-donations':
+                    mainContent = React.createElement(MyDonations, {
+                        onLinkClick: function onLinkClick(event, link, id) {
+                            return _this2.handleLinkForTestClick(event, link, id);
+                        }
+                    });
+                    break;
+                case '/my-tests':
+                    mainContent = React.createElement(MyTests, {
+                        onTestClick: function onTestClick(event, test) {
+                            return _this2.handleTestClick(event, test);
+                        }
+                    });
                     break;
             }
 

@@ -85,11 +85,64 @@ function SectionItem(props) {
         </li>
     )
 }
+
+function getToday() {
+    let today = new Date()
+    let dd = String(today.getDate()).padStart(2, '0')
+    let mm = String(today.getMonth() + 1).padStart(2, '0') //January is 0!
+    let yyyy = today.getFullYear()
+
+    today = dd + '.' + mm + '.' + yyyy
+    return today
+}
+
 function ListItem(props) {
+    let className = 'list__item'
+    let dateInput = ''
+
+    if (props.isChecked) {
+        className += ' checked'
+        dateInput = (
+            <input
+                className="input-datetime"
+                type="datetime"
+                name="startTime"
+                value={getToday()}
+            />
+        )
+    }
+
     return (
-        <li className="list__item" onClick={(event) => props.onClick(event)}>
+        <li
+            className={className}
+            onClick={(event) => props.onClick(event, props.name, getToday())}
+        >
             <div className="name">{props.name}</div>
+            {dateInput}
         </li>
+    )
+}
+
+function SMControlPanel(props) {
+    return (
+        <div className="control-buttons">
+            <button
+                className="button flat"
+                name="cancel"
+                onClick={(event) => props.onCancelClick(event)}
+            >
+                <span className="material-symbols-outlined">close</span>
+                <span className="button-text">Відмінити</span>
+            </button>
+            <button
+                className="button flat"
+                name="confirm"
+                onClick={(event) => props.onConfirmClick(event)}
+            >
+                <span className="material-symbols-outlined">check</span>
+                <span className="button-text">Підтвердити</span>
+            </button>
+        </div>
     )
 }
 
@@ -99,7 +152,7 @@ class SelectionMenu extends React.Component {
 
         this.state = {
             currentSection: null,
-            selected: [],
+            selected: {},
         }
 
         this.restrictions = {
@@ -382,17 +435,64 @@ class SelectionMenu extends React.Component {
         })
     }
 
-    handleRestrictionClick(event, name) {
-        const newSelected = this.state.selected.slice()
+    handleRestrictionClick(event, name, date) {
+        if (event.target.tagName.toLowerCase() === 'input') {
+            return
+        }
 
-        if (newSelected.includes(name)) {
-            newSelected.splice(newSelected.indexOf(name), 1)
+        const newSelected = {}
+
+        for (let key in this.state.selected) {
+            newSelected[key] = this.state.selected[key]
+        }
+
+        if (Object.keys(newSelected).includes(name)) {
+            // newSelected.splice(newSelected.indexOf(name), 1)
+            delete newSelected[name]
         } else {
-            newSelected.push(name)
+            newSelected[name] = date
         }
 
         this.setState({
             selected: newSelected,
+        })
+    }
+
+    handleConfirmClick(event) {
+        fetch('/api/donor/restrictions/add-restrictions', {
+            method: 'POST',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(this.state.selected),
+        })
+            .then((response) => {
+                return response.json()
+            })
+            .then((data) => {
+                console.log(data)
+            })
+
+        this.resetState()
+        this.props.onConfirm(event)
+    }
+
+    handleCancelClick(event) {
+        this.resetState()
+        this.props.onCancel(event)
+    }
+
+    handleBackClick(event) {
+        this.setState({
+            currentSection: null,
+        })
+    }
+
+    resetState() {
+        this.setState({
+            currentSection: null,
+            selected: {},
         })
     }
 
@@ -406,17 +506,26 @@ class SelectionMenu extends React.Component {
     }
 
     renderListItem(name) {
+        let isChecked = false
+
+        if (Object.keys(this.state.selected).includes(name)) {
+            isChecked = true
+        }
+
         return (
             <ListItem
                 name={name}
-                onClick={(event) => this.handleRestrictionClick(event, name)}
+                isChecked={isChecked}
+                onClick={(event, name, date) =>
+                    this.handleRestrictionClick(event, name, date)
+                }
             />
         )
     }
 
     render() {
         let list = null
-        let title = null
+        let header = null
 
         const curSection = this.state.currentSection
 
@@ -424,19 +533,42 @@ class SelectionMenu extends React.Component {
             list = this.restrictions[curSection].map((restriction) => {
                 return this.renderListItem(restriction.name)
             })
-            title = curSection
+            header = (
+                <header className="header restrictions__header">
+                    <button
+                        className="button simple round"
+                        name="back"
+                        onClick={(event) => this.handleBackClick(event)}
+                    >
+                        <span className="material-symbols-outlined">
+                            arrow_back
+                        </span>
+                    </button>
+
+                    <span className="header__text">{curSection}</span>
+                </header>
+            )
         } else {
             list = Object.keys(this.restrictions).map((section) => {
                 return this.renderSectionItem(section)
             })
-            title = 'Оберіть секцію'
+            header = (
+                <header className="header restrictions__header">
+                    <span className="header__text">Оберіть секцію</span>
+                </header>
+            )
         }
 
         return (
-            <ul className="list restrictions">
-                <header className="restrictions__header">{title}</header>
+            <ul className="list secondary restrictions">
+                {header}
 
                 {list}
+
+                <SMControlPanel
+                    onCancelClick={(event) => this.handleCancelClick(event)}
+                    onConfirmClick={(event) => this.handleConfirmClick(event)}
+                />
             </ul>
         )
     }
@@ -448,21 +580,10 @@ export class MyRestrictions extends React.Component {
 
         this.state = {
             addMode: false,
-            restrictions: [
-                {
-                    name: 'Гепатит А',
-                    remainingTime: '7 місяців',
-                    startTime: '15.01.2022',
-                    endTime: '15.01.2023',
-                },
-                {
-                    name: 'Лазерна операція на очах',
-                    remainingTime: '3 дні',
-                    startTime: '17.05.2022',
-                    endTime: '18.06.2022',
-                },
-            ],
+            restrictions: [],
         }
+
+        this.loadRestrictions()
     }
 
     handleAddClick(event) {
@@ -473,11 +594,46 @@ export class MyRestrictions extends React.Component {
 
     handleRemoveClick(event, name) {}
 
+    handleCancelAdding(event) {
+        this.setState({
+            addMode: false,
+        })
+    }
+
+    handleConfirmAdding(event) {
+        this.loadRestrictions()
+    }
+
+    loadRestrictions() {
+        fetch('/api/donor/restrictions/get-restrictions', {
+            method: 'GET',
+            headers: {
+                Accept: 'application/json',
+            },
+        })
+            .then((response) => {
+                return response.json()
+            })
+            .then((data) => {
+                console.log(data)
+
+                this.setState({
+                    addMode: false,
+                    restrictions: data.result,
+                })
+            })
+    }
+
     render() {
         if (this.state.addMode) {
             return (
                 <div className="container">
-                    <SelectionMenu />
+                    <SelectionMenu
+                        onCancel={(event) => this.handleCancelAdding(event)}
+                        onConfirm={(event) => {
+                            this.handleConfirmAdding(event)
+                        }}
+                    />
                 </div>
             )
         }

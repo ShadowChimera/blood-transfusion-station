@@ -129,17 +129,17 @@ $side-bar-bg-color: #F0F5FC;
         margin: 0 auto;
         padding: .75em 1em;
 
-        box-shadow: none !important;
+        // box-shadow: none !important;
 
-        background-color: transparent;
-        border: 1px solid #CE525C;
-        color: #B94D58;
-        font-weight: 500;
+        // background-color: transparent;
+        // border: 1px solid #CE525C;
+        // color: #B94D58;
+        // font-weight: 500;
 
-        &:hover {
-            background-color: #CE525C;
-            color: #fff;
-        }
+        // &:hover {
+        //     background-color: #CE525C;
+        //     color: #fff;
+        // }
     }
 }
 
@@ -160,6 +160,10 @@ $side-bar-bg-color: #F0F5FC;
 
         .avatar {
             grid-area: avatar;
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
 
             width: 112px;
             height: 112px;
@@ -226,9 +230,7 @@ $side-bar-bg-color: #F0F5FC;
 
 .history {
     display: grid;
-    // grid-template-columns: repeat(4, auto);
     grid-template-columns: repeat(4, 1fr);
-    // justify-items: center;
     gap: 1em;
 
     &__header {
@@ -246,7 +248,7 @@ $side-bar-bg-color: #F0F5FC;
 
         &:hover {
             > * {
-                background-color: rgba(31, 44, 55, 0.05);
+                background-color: #1f2c370d;
             }
         }
 
@@ -281,10 +283,43 @@ $side-bar-bg-color: #F0F5FC;
                 }
             }
         }
+    }
 
-        // > *:not(.name) {
-        //     width: fit-content;
-        //     margin: 0 auto;
-        // }
+    // &.h-secondary,
+    // &.h-tertiary {
+    //     align-items: start;
+    // }
+
+    &.h-secondary {
+        .history__item {
+            & > * {
+                display: block;
+
+                & > * {
+                    display: block;
+                }
+            }
+        }
+    }
+
+    &.h-tertiary {
+        .history__item {
+            > *:not(:last-child){
+                display: block;
+
+                & > * {
+                    display: block;
+                }
+            }
+
+            &:hover {
+                > *:not(:last-child) {
+                    background-color: #1f2c370d;
+                }
+                > *:last-child {
+                    background-color: transparent !important;
+                }
+            }
+        }
     }
 }

@@ -146,6 +146,55 @@ $separator-color-primary: #F0F5FC;
     list-style: none;
     margin: 0;
     padding: 0;
+    background-color: transparent;
+
+    .header {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        
+        font-size: 1.5em;
+        font-weight: 500;
+        margin-bottom: 1em;
+    }
+
+    &.primary {
+        .list__item {
+            display: block;
+            padding: .25em .5em;
+        }
+    }
+
+    &.secondary {
+        .list__item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1em;
+
+            border: 2px solid transparent;
+
+            cursor: pointer;
+
+            &:nth-child(n + 2) {
+                margin-top: .5em;
+            }
+
+            &:hover {
+                background-color: #1f2c370d;
+            }
+            &:active {
+                background-color: #1f2c371a;
+            }
+
+            &.checked {
+                border-color: $color-active;
+                background-color: #4387f40d;
+                color: $color-active;
+                font-weight: 500;
+            }
+        }
+    }
 }
 
 
@@ -232,7 +281,9 @@ $border-color-primary: #DBDDF1;
 
 
 .section {
-    margin-top: 2rem;
+    &:not(:first-child) {
+        margin-top: 2rem;
+    }
 
     .title {
         margin: 0;
@@ -272,7 +323,10 @@ $border-color-primary: #DBDDF1;
 }
 
 $button-color-primary: #4285F4;
-$button-color-hover: #3D78D7;
+$button-color-primary-hover: #3D78D7;
+
+$button-color-secondary: #EC5863;
+$button-color-secondary-hover: hsl(356, 59%, 57%);
 
 .button {
     display: flex;
@@ -285,8 +339,6 @@ $button-color-hover: #3D78D7;
     font-size: 1rem;
     color: #fff;
 
-    background-color: $button-color-primary;
-
     border: none;
     border-radius: .25em;
 
@@ -297,22 +349,115 @@ $button-color-hover: #3D78D7;
     box-shadow: 0px 4.5px 9px rgba(31, 44, 55, 0.1), 
                 0px 3px 6px rgba(31, 44, 55, 0.1);
 
-    &:hover {
-        background-color: $button-color-hover;
-
-        // box-shadow: 0px 9px 18px rgba(31, 44, 55, 0.1), 
-        //             0px 4.5px 9px rgba(31, 44, 55, 0.1), 
-        //             0px 3px 6px rgba(31, 44, 55, 0.1);
-    }
     &:active {
         box-shadow: 0px 3px 6px rgba(31, 44, 55, 0.1);
     }
 
-    &.flat {
+    &,
+    &.pcolor {
+        background-color: $button-color-primary;
+
+        &:hover {
+            background-color: $button-color-primary-hover;
+        }
+    }
+
+    &.scolor {
+        background-color: $button-color-secondary;
+
+        &:hover {
+            background-color: $button-color-secondary-hover;
+        }
+    }
+
+
+    &.secondary {
         box-shadow: none !important;
+        background-color: transparent;
+        font-weight: 500;
+
+        &:hover {
+            color: #fff !important;
+        }
+
+        &,
+        &.pcolor {
+            border: 1px solid $button-color-primary;
+            color: $button-color-primary;
+            
+            &:hover {
+                background-color: $button-color-primary;
+            }
+            &:active {
+                background-color: $button-color-primary-hover;
+            }
+        }
+
+        &.scolor {
+            border: 1px solid $button-color-secondary;
+            color: $button-color-secondary;
+
+            &:hover {
+                background-color: $button-color-secondary;
+            }
+            &:active {
+                background-color: $button-color-secondary-hover;
+            }
+        }
+    }
+
+    &.flat,
+    &.simple {
+        box-shadow: none !important;
+    }
+    &.simple {
+        background-color: transparent;
+        color: $f-color-primary;
+
+        &:hover {
+            background-color: #1f2c370d;
+        }
+        &:active {
+            background-color: #1f2c371a;
+        }
+    }
+    &.round {
+        padding: .75em;
+        border-radius: 100%;
     }
 }
 
 .helper {
     // opacity: $opacity-disabled;
+}
+
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+
+    .column {
+        padding: .5em;
+        border: 1px solid #1f2c381a;
+    }
+
+    .row {
+        cursor: default;
+        
+        &:hover {
+            .column {
+                background-color: #1f2c370d;
+            }
+        }
+    }
+}
+
+.control-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    
+    font-size: 1.25em;
+    font-weight: 500;
+    margin-bottom: 1em;
 }

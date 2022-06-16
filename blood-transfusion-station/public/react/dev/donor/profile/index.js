@@ -2,6 +2,8 @@ import { Header } from '../../components/header.js'
 import { SideBar } from '../../components/profile-side-bar.js'
 import { UserInfo } from './tabs-content/user-info.js'
 import { MyRestrictions } from './tabs-content/my-restrictions.js'
+import { MyDonations } from './tabs-content/my-donations.js'
+import { MyTests } from './tabs-content/my-tests.js'
 
 class Profile extends React.Component {
     constructor(props) {
@@ -67,6 +69,16 @@ class Profile extends React.Component {
         })
     }
 
+    handleLinkForTestClick(event, link, id) {
+        event.preventDefault()
+        console.log(link)
+    }
+
+    handleTestClick(event, test) {
+        // event.preventDefault()
+        console.log(test)
+    }
+
     render() {
         let mainContent = <UserInfo />
 
@@ -76,6 +88,24 @@ class Profile extends React.Component {
                 break
             case '/my-restrictions':
                 mainContent = <MyRestrictions />
+                break
+            case '/my-donations':
+                mainContent = (
+                    <MyDonations
+                        onLinkClick={(event, link, id) =>
+                            this.handleLinkForTestClick(event, link, id)
+                        }
+                    />
+                )
+                break
+            case '/my-tests':
+                mainContent = (
+                    <MyTests
+                        onTestClick={(event, test) =>
+                            this.handleTestClick(event, test)
+                        }
+                    />
+                )
                 break
         }
 

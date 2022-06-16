@@ -42,6 +42,7 @@ global.__user = {
 //  Маршрутизация ===================================================================
 
 const donorRouter = require(`${global.__basedir}/modules/routers/donor.js`)
+const authRouter = require(`${global.__basedir}/modules/routers/auth.js`)
 
 app.get('/', (req, res) => {
     res.status(200).type('text/html')
@@ -75,39 +76,7 @@ app.get('/profile', (req, res) => {
     })
 })
 
-app.get('/sign-up', (req, res) => {
-    if (global.__user.authorized) {
-        res.redirect('/profile')
-        return
-    }
-
-    res.status(200).type('text/html')
-    res.sendFile(`public/html/${global.__user.type}/sign-up.html`, {
-        root: global.__basedir,
-    })
-})
-
-app.post('/sign-up', urlencodedParser, (req, res) => {
-    const signUp = require(`${global.__basedir}/api/auth/sign-up.js`)
-    signUp(req, res)
-})
-
-app.get('/sign-in', (req, res) => {
-    if (global.__user.authorized) {
-        res.redirect('/profile')
-        return
-    }
-
-    res.status(200).type('text/html')
-    res.sendFile(`public/html/${global.__user.type}/sign-in.html`, {
-        root: global.__basedir,
-    })
-})
-
-app.post('/sign-in', urlencodedParser, (req, res) => {
-    const signIn = require(`${global.__basedir}/api/auth/sign-in.js`)
-    signIn(req, res)
-})
+app.use(authRouter)
 
 app.use((req, res, next) => {
     res.sendStatus(404)
