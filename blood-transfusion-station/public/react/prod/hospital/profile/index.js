@@ -9,9 +9,6 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 import { Header } from '../../components/header.js';
 import { SideBar } from '../../components/profile-side-bar.js';
 import { UserInfo } from './tabs-content/user-info.js';
-import { MyRestrictions } from './tabs-content/my-restrictions.js';
-import { MyDonations } from './tabs-content/my-donations.js';
-import { MyTests } from './tabs-content/my-tests.js';
 
 var Profile = function (_React$Component) {
     _inherits(Profile, _React$Component);
@@ -30,14 +27,10 @@ var Profile = function (_React$Component) {
                 link: '/about/station',
                 text: 'Про центр',
                 type: 'link'
-            }, {
-                link: '/about/donation',
-                text: 'Про донорство',
-                type: 'link'
             }],
             profileNav: [{
-                link: '/appointment',
-                text: 'Записатися',
+                link: '/send-blood-request',
+                text: 'Подати запит',
                 type: 'link button secondary tcolor'
             }, {
                 link: '/profile',
@@ -53,17 +46,9 @@ var Profile = function (_React$Component) {
                     text: 'Профіль',
                     isActive: true
                 }, {
-                    link: '/my-restrictions',
-                    icon: 'block',
-                    text: 'Мої обмеження'
-                }, {
-                    link: '/my-donations',
+                    link: '/blood-requests',
                     icon: 'water_drop',
-                    text: 'Мої донації'
-                }, {
-                    link: '/my-tests',
-                    icon: 'science',
-                    text: 'Мої аналізи'
+                    text: 'Мої запити'
                 }, {
                     link: '/notifications-settings',
                     icon: 'notifications',
@@ -109,22 +94,8 @@ var Profile = function (_React$Component) {
                 case '/profile':
                     mainContent = React.createElement(UserInfo, null);
                     break;
-                case '/my-restrictions':
-                    mainContent = React.createElement(MyRestrictions, null);
-                    break;
-                case '/my-donations':
-                    mainContent = React.createElement(MyDonations, {
-                        onLinkClick: function onLinkClick(event, link, id) {
-                            return _this2.handleLinkForTestClick(event, link, id);
-                        }
-                    });
-                    break;
-                case '/my-tests':
-                    mainContent = React.createElement(MyTests, {
-                        onTestClick: function onTestClick(event, test) {
-                            return _this2.handleTestClick(event, test);
-                        }
-                    });
+                case '/blood-requests':
+                    mainContent = React.createElement(BloodRequests, null);
                     break;
             }
 

@@ -36,12 +36,13 @@ const USER_TYPES = {
 
 global.__user = {
     authorized: true,
-    type: 'donor',
+    type: 'hospital',
 }
 
 //  Маршрутизация ===================================================================
 
 const donorRouter = require(`${global.__basedir}/modules/routers/donor.js`)
+const hospitalRouter = require(`${global.__basedir}/modules/routers/hospital.js`)
 const authRouter = require(`${global.__basedir}/modules/routers/auth.js`)
 
 app.get('/', (req, res) => {
@@ -55,6 +56,7 @@ app.get('/', (req, res) => {
 app.use(express.static(`${global.__basedir}/public`))
 
 app.use(donorRouter)
+app.use(hospitalRouter)
 
 app.get('/test', (req, res) => {
     res.status(200).type('text/html')

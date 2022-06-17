@@ -3,9 +3,17 @@ import { logo } from './logo.js'
 function NavItem(props) {
     const key = `navItem__${props.link}`
 
+    let className = props.type
+    let link = props.link
+
+    if (props.isActive) {
+        className += ' active'
+        link = '#'
+    }
+
     return (
         <li key={key} className="list__item">
-            <a href={props.link} className="link">
+            <a href={link} className={className}>
                 {props.text}
             </a>
         </li>
@@ -14,11 +22,23 @@ function NavItem(props) {
 
 class Nav extends React.Component {
     renderNavItem(nav) {
-        return <NavItem link={nav.link} text={nav.text} />
+        return (
+            <NavItem
+                link={nav.link}
+                isActive={nav.isActive}
+                text={nav.text}
+                type={nav.type}
+            />
+        )
     }
 
     render() {
         const navItems = this.props.navItems.map((nav) => {
+            nav.type = 'link'
+            return this.renderNavItem(nav)
+        })
+
+        const profileNavItems = this.props.profileNavItems.map((nav) => {
             return this.renderNavItem(nav)
         })
 
@@ -26,13 +46,7 @@ class Nav extends React.Component {
             <nav className="main-nav">
                 <ul className="list info-nav">{navItems}</ul>
 
-                <ul className="list profile-nav">
-                    <li key="navItem__profile" className="list__item">
-                        <a href="#" className="link active">
-                            Особистий кабінет
-                        </a>
-                    </li>
-                </ul>
+                <ul className="list profile-nav">{profileNavItems}</ul>
             </nav>
         )
     }
@@ -45,7 +59,10 @@ export class Header extends React.Component {
                 {logo}
 
                 <div className="container">
-                    <Nav navItems={this.props.navItems} />
+                    <Nav
+                        navItems={this.props.navItems}
+                        profileNavItems={this.props.profileNavItems}
+                    />
                 </div>
             </header>
         )

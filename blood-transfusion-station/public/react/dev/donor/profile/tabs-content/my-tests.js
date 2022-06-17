@@ -108,20 +108,6 @@ class Test extends React.Component {
         super(props)
 
         this.state = JSON.parse(this.props.test)
-
-        // this.state = {
-        //     express: {
-        //         header: [],
-        //         data: [],
-        //     },
-        //     lab: {
-        //         header: [],
-        //         data: [],
-        //     },
-        //     viruses: [],
-        // }
-
-        // loadTest()
     }
 
     loadTest() {

@@ -146,6 +146,41 @@ function SMControlPanel(props) {
     )
 }
 
+function SelectionDisplay(props) {
+    const list = []
+    for (let restriction in props.selected) {
+        list.push(
+            <li className="list__item">
+                <div className="wrapper">
+                    <div className="name">{restriction}</div>
+                    <input
+                        className="input-datetime"
+                        type="datetime"
+                        name="startTime"
+                        value={props.selected[restriction]}
+                    />
+                </div>
+                <button
+                    className="button simple round"
+                    name="remove"
+                    onClick={(event) => props.onRemoveClick(event, restriction)}
+                >
+                    <span className="material-symbols-outlined">delete</span>
+                </button>
+            </li>
+        )
+    }
+
+    return (
+        <ul className="list side">
+            <header className="header">
+                <span className="header__text">Обрані обмеження</span>
+            </header>
+            {list}
+        </ul>
+    )
+}
+
 class SelectionMenu extends React.Component {
     constructor(props) {
         super(props)
@@ -489,6 +524,23 @@ class SelectionMenu extends React.Component {
         })
     }
 
+    handleRemoveClick(event, restriction) {
+        console.log(restriction)
+        const newSelected = {}
+
+        for (let key in this.state.selected) {
+            if (key === restriction) {
+                continue
+            }
+
+            newSelected[key] = this.state.selected[key]
+        }
+
+        this.setState({
+            selected: newSelected,
+        })
+    }
+
     resetState() {
         this.setState({
             currentSection: null,
@@ -560,16 +612,25 @@ class SelectionMenu extends React.Component {
         }
 
         return (
-            <ul className="list secondary restrictions">
-                {header}
-
-                {list}
+            <div className="wrapper selection-menu">
+                <div className="split">
+                    <ul className="list secondary restrictions">
+                        {header}
+                        {list}
+                    </ul>
+                    <SelectionDisplay
+                        selected={this.state.selected}
+                        onRemoveClick={(event, restriction) =>
+                            this.handleRemoveClick(event, restriction)
+                        }
+                    />
+                </div>
 
                 <SMControlPanel
                     onCancelClick={(event) => this.handleCancelClick(event)}
                     onConfirmClick={(event) => this.handleConfirmClick(event)}
                 />
-            </ul>
+            </div>
         )
     }
 }
@@ -627,7 +688,7 @@ export class MyRestrictions extends React.Component {
     render() {
         if (this.state.addMode) {
             return (
-                <div className="container">
+                <div className="container selection-menu-container">
                     <SelectionMenu
                         onCancel={(event) => this.handleCancelAdding(event)}
                         onConfirm={(event) => {

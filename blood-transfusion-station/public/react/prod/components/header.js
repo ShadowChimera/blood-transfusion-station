@@ -9,14 +9,22 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 import { logo } from './logo.js';
 
 function NavItem(props) {
-    var key = "navItem__" + props.link;
+    var key = 'navItem__' + props.link;
+
+    var className = props.type;
+    var link = props.link;
+
+    if (props.isActive) {
+        className += ' active';
+        link = '#';
+    }
 
     return React.createElement(
-        "li",
-        { key: key, className: "list__item" },
+        'li',
+        { key: key, className: 'list__item' },
         React.createElement(
-            "a",
-            { href: props.link, className: "link" },
+            'a',
+            { href: link, className: className },
             props.text
         )
     );
@@ -32,39 +40,41 @@ var Nav = function (_React$Component) {
     }
 
     _createClass(Nav, [{
-        key: "renderNavItem",
+        key: 'renderNavItem',
         value: function renderNavItem(nav) {
-            return React.createElement(NavItem, { link: nav.link, text: nav.text });
+            return React.createElement(NavItem, {
+                link: nav.link,
+                isActive: nav.isActive,
+                text: nav.text,
+                type: nav.type
+            });
         }
     }, {
-        key: "render",
+        key: 'render',
         value: function render() {
             var _this2 = this;
 
             var navItems = this.props.navItems.map(function (nav) {
+                nav.type = 'link';
+                return _this2.renderNavItem(nav);
+            });
+
+            var profileNavItems = this.props.profileNavItems.map(function (nav) {
                 return _this2.renderNavItem(nav);
             });
 
             return React.createElement(
-                "nav",
-                { className: "main-nav" },
+                'nav',
+                { className: 'main-nav' },
                 React.createElement(
-                    "ul",
-                    { className: "list info-nav" },
+                    'ul',
+                    { className: 'list info-nav' },
                     navItems
                 ),
                 React.createElement(
-                    "ul",
-                    { className: "list profile-nav" },
-                    React.createElement(
-                        "li",
-                        { key: "navItem__profile", className: "list__item" },
-                        React.createElement(
-                            "a",
-                            { href: "#", className: "link active" },
-                            "\u041E\u0441\u043E\u0431\u0438\u0441\u0442\u0438\u0439 \u043A\u0430\u0431\u0456\u043D\u0435\u0442"
-                        )
-                    )
+                    'ul',
+                    { className: 'list profile-nav' },
+                    profileNavItems
                 )
             );
         }
@@ -83,16 +93,19 @@ export var Header = function (_React$Component2) {
     }
 
     _createClass(Header, [{
-        key: "render",
+        key: 'render',
         value: function render() {
             return React.createElement(
-                "header",
-                { className: "main-header" },
+                'header',
+                { className: 'main-header' },
                 logo,
                 React.createElement(
-                    "div",
-                    { className: "container" },
-                    React.createElement(Nav, { navItems: this.props.navItems })
+                    'div',
+                    { className: 'container' },
+                    React.createElement(Nav, {
+                        navItems: this.props.navItems,
+                        profileNavItems: this.props.profileNavItems
+                    })
                 )
             );
         }
