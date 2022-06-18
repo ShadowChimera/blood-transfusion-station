@@ -9,6 +9,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 import { Header } from '../../components/header.js';
 import { SideBar } from '../../components/profile-side-bar.js';
 import { UserInfo } from './tabs-content/user-info.js';
+import { MyRequests } from './tabs-content/my-requests.js';
 
 var Profile = function (_React$Component) {
     _inherits(Profile, _React$Component);
@@ -46,7 +47,7 @@ var Profile = function (_React$Component) {
                     text: 'Профіль',
                     isActive: true
                 }, {
-                    link: '/blood-requests',
+                    link: '/my-requests',
                     icon: 'water_drop',
                     text: 'Мої запити'
                 }, {
@@ -94,8 +95,8 @@ var Profile = function (_React$Component) {
                 case '/profile':
                     mainContent = React.createElement(UserInfo, null);
                     break;
-                case '/blood-requests':
-                    mainContent = React.createElement(BloodRequests, null);
+                case '/my-requests':
+                    mainContent = React.createElement(MyRequests, null);
                     break;
             }
 

@@ -8,6 +8,11 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 function HistoryItem(props) {
     var link = "/my-tests?test-id=" + props.testId;
+
+    // const components = props.components.map((component) => {
+    //     return <div>component</div>
+    // })
+
     return React.createElement(
         "li",
         { key: props.name, className: "list__item history__item" },
@@ -18,33 +23,23 @@ function HistoryItem(props) {
         ),
         React.createElement(
             "div",
-            { className: "donation-type" },
-            props.donationType
+            { className: "blood-group" },
+            props.bloodGroup
         ),
         React.createElement(
             "div",
-            { className: "test-result" },
-            React.createElement(
-                "span",
-                { className: "test-result__text" },
-                props.testResult
-            ),
-            React.createElement(
-                "a",
-                {
-                    href: link,
-                    className: "link test-result__link",
-                    onClick: function onClick(event) {
-                        props.onLinkClick(event, link, props.testId);
-                    }
-                },
-                "\u0414\u043E\u043A\u043B\u0430\u0434\u043D\u0456\u0448\u0435"
-            )
+            { className: "blood-component" },
+            props.component
         ),
         React.createElement(
             "div",
-            { className: "details" },
-            props.details
+            { className: "count" },
+            props.count
+        ),
+        React.createElement(
+            "div",
+            { className: "status" },
+            props.status
         )
     );
 }
@@ -60,32 +55,27 @@ var History = function (_React$Component) {
 
     _createClass(History, [{
         key: "renderHistoryItems",
-        value: function renderHistoryItems(donation) {
-            var _this2 = this;
-
+        value: function renderHistoryItems(request) {
             return React.createElement(HistoryItem, {
-                date: donation.date,
-                donationType: donation.donationType,
-                testId: donation.date,
-                testResult: donation.testResult,
-                details: donation.details,
-                onLinkClick: function onLinkClick(event, link, id) {
-                    return _this2.props.onLinkClick(event, link, id);
-                }
+                date: request.date,
+                bloodGroup: request.bloodGroup,
+                component: request.component,
+                count: request.count,
+                status: request.status
             });
         }
     }, {
         key: "render",
         value: function render() {
-            var _this3 = this;
+            var _this2 = this;
 
-            var historyItems = this.props.donations.map(function (donation) {
-                return _this3.renderHistoryItems(donation);
+            var historyItems = this.props.requests.map(function (request) {
+                return _this2.renderHistoryItems(request);
             });
 
             return React.createElement(
                 "ul",
-                { className: "list history h-secondary" },
+                { className: "list history h-5 h-secondary" },
                 React.createElement(
                     "header",
                     { className: "history__header history__item" },
@@ -104,7 +94,7 @@ var History = function (_React$Component) {
                         React.createElement(
                             "div",
                             { className: "value" },
-                            "\u0422\u0438\u043F \u0434\u043E\u043D\u0430\u0446\u0456\u0457"
+                            "\u0413\u0440\u0443\u043F\u0430 \u043A\u0440\u043E\u0432\u0456"
                         )
                     ),
                     React.createElement(
@@ -113,7 +103,7 @@ var History = function (_React$Component) {
                         React.createElement(
                             "div",
                             { className: "value" },
-                            "\u0410\u043D\u0430\u043B\u0456\u0437 \u043A\u0440\u043E\u0432\u0456"
+                            "\u041A\u043E\u043C\u043F\u043E\u043D\u0435\u043D\u0442\u0430"
                         )
                     ),
                     React.createElement(
@@ -122,7 +112,16 @@ var History = function (_React$Component) {
                         React.createElement(
                             "div",
                             { className: "value" },
-                            "\u041F\u043E\u0434\u0440\u043E\u0431\u0438\u0446\u0456"
+                            "\u041A\u0456\u043B\u044C\u043A\u0456\u0441\u0442\u044C"
+                        )
+                    ),
+                    React.createElement(
+                        "div",
+                        { className: "header__item" },
+                        React.createElement(
+                            "div",
+                            { className: "value" },
+                            "\u0421\u0442\u0430\u0442\u0443\u0441"
                         )
                     )
                 ),
@@ -134,33 +133,33 @@ var History = function (_React$Component) {
     return History;
 }(React.Component);
 
-export var MyDonations = function (_React$Component2) {
-    _inherits(MyDonations, _React$Component2);
+export var MyRequests = function (_React$Component2) {
+    _inherits(MyRequests, _React$Component2);
 
-    function MyDonations(props) {
-        _classCallCheck(this, MyDonations);
+    function MyRequests(props) {
+        _classCallCheck(this, MyRequests);
 
-        var _this4 = _possibleConstructorReturn(this, (MyDonations.__proto__ || Object.getPrototypeOf(MyDonations)).call(this, props));
+        var _this3 = _possibleConstructorReturn(this, (MyRequests.__proto__ || Object.getPrototypeOf(MyRequests)).call(this, props));
 
-        _this4.state = {
-            donations: []
+        _this3.state = {
+            requests: []
         };
 
-        _this4.loadDonations();
-        return _this4;
+        _this3.loadRequests();
+        return _this3;
     }
 
-    _createClass(MyDonations, [{
+    _createClass(MyRequests, [{
         key: "handleLinkClick",
         value: function handleLinkClick(event, link, id) {
             this.props.onLinkClick(event, link, id);
         }
     }, {
-        key: "loadDonations",
-        value: function loadDonations() {
-            var _this5 = this;
+        key: "loadRequests",
+        value: function loadRequests() {
+            var _this4 = this;
 
-            fetch('/api/donor/donations/get-donations', {
+            fetch('/api/hospital/blood-requests/get-blood-requests', {
                 method: 'GET',
                 headers: {
                     Accept: 'application/json'
@@ -170,28 +169,21 @@ export var MyDonations = function (_React$Component2) {
             }).then(function (data) {
                 console.log(data);
 
-                _this5.setState({
-                    donations: data.result
+                _this4.setState({
+                    requests: data.result
                 });
             });
         }
     }, {
         key: "render",
         value: function render() {
-            var _this6 = this;
-
             return React.createElement(
                 "div",
                 { className: "container" },
-                React.createElement(History, {
-                    donations: this.state.donations,
-                    onLinkClick: function onLinkClick(event, link, id) {
-                        return _this6.handleLinkClick(event, link, id);
-                    }
-                })
+                React.createElement(History, { requests: this.state.requests })
             );
         }
     }]);
 
-    return MyDonations;
+    return MyRequests;
 }(React.Component);

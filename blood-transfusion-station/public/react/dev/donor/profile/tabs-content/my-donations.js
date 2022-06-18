@@ -27,7 +27,7 @@ class History extends React.Component {
             <HistoryItem
                 date={donation.date}
                 donationType={donation.donationType}
-                testId={donation.testId}
+                testId={donation.date}
                 testResult={donation.testResult}
                 details={donation.details}
                 onLinkClick={(event, link, id) =>

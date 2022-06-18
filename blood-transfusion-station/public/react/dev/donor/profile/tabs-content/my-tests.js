@@ -108,6 +108,16 @@ class Test extends React.Component {
         super(props)
 
         this.state = JSON.parse(this.props.test)
+        // this.state = {
+        //     express: {},
+        //     lab: {},
+        //     viruses: [],
+        // }
+
+        // console.log('Test')
+        // console.log(this.props.testId)
+
+        // this.loadTest()
     }
 
     loadTest() {
@@ -123,6 +133,7 @@ class Test extends React.Component {
                 return response.json()
             })
             .then((data) => {
+                console.log(data.result)
                 this.setState(data.result)
             })
     }
@@ -132,6 +143,8 @@ class Test extends React.Component {
     }
 
     render() {
+        console.log(this.state)
+
         return (
             <div className="table-container">
                 <header className="header control-header">
@@ -173,6 +186,16 @@ export class MyTests extends React.Component {
             showTestInfo: false,
             testToShow: {},
             tests: [],
+        }
+
+        console.log('MyTests')
+        console.log(this.props.testId)
+
+        if (this.props.testId) {
+            this.state.showTestInfo = true
+            this.state.testToShow = {
+                title: this.props.testId,
+            }
         }
 
         this.loadTests()
@@ -225,6 +248,7 @@ export class MyTests extends React.Component {
                 <Test
                     test={this.state.testToShow.test}
                     title={this.state.testToShow.title}
+                    testId={this.state.testToShow.title}
                     onBackClick={(event) => this.handleBackClick(event)}
                 />
             )

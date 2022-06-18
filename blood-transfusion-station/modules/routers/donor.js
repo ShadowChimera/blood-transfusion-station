@@ -89,6 +89,22 @@ router.get('/notifications-settings', (req, res) => {
     )
 })
 
+router.get('/appointment', (req, res) => {
+    if (!global.__user.authorized) {
+        res.redirect('/sign-in')
+        return
+    }
+
+    if (global.__user.type !== 'donor') {
+        return
+    }
+
+    res.status(200).type('text/html')
+    res.sendFile(`public/html/${global.__user.type}/appointment.html`, {
+        root: global.__basedir,
+    })
+})
+
 router.get('/api/donor/user-info/get-user-info', (req, res) => {
     const getUserInfo = require(`${global.__basedir}/api/donor/user-info/get-user-info.js`)
     getUserInfo(req, res)

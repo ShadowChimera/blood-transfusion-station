@@ -71,6 +71,7 @@ class Profile extends React.Component {
                     },
                 ],
             },
+            toOpenId: null,
         }
     }
 
@@ -88,6 +89,14 @@ class Profile extends React.Component {
     handleLinkForTestClick(event, link, id) {
         event.preventDefault()
         console.log(link)
+
+        this.setState({
+            sideBar: {
+                activeTab: '/my-tests',
+                tabs: this.state.sideBar.tabs,
+            },
+            toOpenId: id,
+        })
     }
 
     handleTestClick(event, test) {
@@ -117,6 +126,7 @@ class Profile extends React.Component {
             case '/my-tests':
                 mainContent = (
                     <MyTests
+                        testId={this.state.toOpenId}
                         onTestClick={(event, test) =>
                             this.handleTestClick(event, test)
                         }

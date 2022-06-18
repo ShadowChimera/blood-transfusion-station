@@ -66,7 +66,7 @@ var History = function (_React$Component) {
             return React.createElement(HistoryItem, {
                 date: donation.date,
                 donationType: donation.donationType,
-                testId: donation.date,
+                testId: donation.testId,
                 testResult: donation.testResult,
                 details: donation.details,
                 onLinkClick: function onLinkClick(event, link, id) {

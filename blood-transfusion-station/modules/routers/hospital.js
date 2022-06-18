@@ -27,6 +27,11 @@ router.get('/api/hospital/user-info/get-user-info', (req, res) => {
     getUserInfo(req, res)
 })
 
+router.get('/api/hospital/blood-requests/get-blood-requests', (req, res) => {
+    const getRequests = require(`${global.__basedir}/api/hospital/blood-requests/get-blood-requests.js`)
+    getRequests(req, res)
+})
+
 // router.post(
 //     '/api/donor/restrictions/add-restrictions',
 //     jsonParser,

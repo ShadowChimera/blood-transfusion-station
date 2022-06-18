@@ -69,7 +69,8 @@ var Profile = function (_React$Component) {
                     icon: 'notifications',
                     text: 'Повідомлення'
                 }]
-            }
+            },
+            toOpenId: null
         };
         return _this;
     }
@@ -91,6 +92,14 @@ var Profile = function (_React$Component) {
         value: function handleLinkForTestClick(event, link, id) {
             event.preventDefault();
             console.log(link);
+
+            this.setState({
+                sideBar: {
+                    activeTab: '/my-tests',
+                    tabs: this.state.sideBar.tabs
+                },
+                toOpenId: id
+            });
         }
     }, {
         key: 'handleTestClick',
@@ -121,6 +130,7 @@ var Profile = function (_React$Component) {
                     break;
                 case '/my-tests':
                     mainContent = React.createElement(MyTests, {
+                        testId: this.state.toOpenId,
                         onTestClick: function onTestClick(event, test) {
                             return _this2.handleTestClick(event, test);
                         }

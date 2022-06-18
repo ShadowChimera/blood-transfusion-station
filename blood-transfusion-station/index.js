@@ -78,6 +78,30 @@ app.get('/profile', (req, res) => {
     })
 })
 
+app.get('/sign-in', (req, res) => {
+    // if (global.__user.authorized) {
+    //     res.redirect('/profile')
+    //     return
+    // }
+
+    res.status(200).type('text/html')
+    res.sendFile(`public/html/guest/sign-in.html`, {
+        root: global.__basedir,
+    })
+})
+
+app.get('/sign-up', (req, res) => {
+    // if (global.__user.authorized) {
+    //     res.redirect('/profile')
+    //     return
+    // }
+
+    res.status(200).type('text/html')
+    res.sendFile(`public/html/guest/sign-up.html`, {
+        root: global.__basedir,
+    })
+})
+
 app.use(authRouter)
 
 app.use((req, res, next) => {

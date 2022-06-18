@@ -220,6 +220,16 @@ var Test = function (_React$Component3) {
         var _this7 = _possibleConstructorReturn(this, (Test.__proto__ || Object.getPrototypeOf(Test)).call(this, props));
 
         _this7.state = JSON.parse(_this7.props.test);
+        // this.state = {
+        //     express: {},
+        //     lab: {},
+        //     viruses: [],
+        // }
+
+        // console.log('Test')
+        // console.log(this.props.testId)
+
+        // this.loadTest()
         return _this7;
     }
 
@@ -238,6 +248,7 @@ var Test = function (_React$Component3) {
             }).then(function (response) {
                 return response.json();
             }).then(function (data) {
+                console.log(data.result);
                 _this8.setState(data.result);
             });
         }
@@ -250,6 +261,8 @@ var Test = function (_React$Component3) {
         key: "render",
         value: function render() {
             var _this9 = this;
+
+            console.log(this.state);
 
             return React.createElement(
                 "div",
@@ -325,6 +338,16 @@ export var MyTests = function (_React$Component4) {
             tests: []
         };
 
+        console.log('MyTests');
+        console.log(_this10.props.testId);
+
+        if (_this10.props.testId) {
+            _this10.state.showTestInfo = true;
+            _this10.state.testToShow = {
+                title: _this10.props.testId
+            };
+        }
+
         _this10.loadTests();
         return _this10;
     }
@@ -384,6 +407,7 @@ export var MyTests = function (_React$Component4) {
                 content = React.createElement(Test, {
                     test: this.state.testToShow.test,
                     title: this.state.testToShow.title,
+                    testId: this.state.testToShow.title,
                     onBackClick: function onBackClick(event) {
                         return _this12.handleBackClick(event);
                     }

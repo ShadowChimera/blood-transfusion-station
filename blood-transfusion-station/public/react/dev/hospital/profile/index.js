@@ -1,6 +1,7 @@
 import { Header } from '../../components/header.js'
 import { SideBar } from '../../components/profile-side-bar.js'
 import { UserInfo } from './tabs-content/user-info.js'
+import { MyRequests } from './tabs-content/my-requests.js'
 
 class Profile extends React.Component {
     constructor(props) {
@@ -47,7 +48,7 @@ class Profile extends React.Component {
                         isActive: true,
                     },
                     {
-                        link: '/blood-requests',
+                        link: '/my-requests',
                         icon: 'water_drop',
                         text: 'Мої запити',
                     },
@@ -89,8 +90,8 @@ class Profile extends React.Component {
             case '/profile':
                 mainContent = <UserInfo />
                 break
-            case '/blood-requests':
-                mainContent = <BloodRequests />
+            case '/my-requests':
+                mainContent = <MyRequests />
                 break
         }
 

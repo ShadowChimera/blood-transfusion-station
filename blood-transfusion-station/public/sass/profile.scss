@@ -43,6 +43,7 @@ $side-bar-bg-color: #F0F5FC;
     padding: 2rem;
 
     background-color: $side-bar-bg-color;
+    box-shadow: 0px 3px 6px rgba(31, 44, 55, 0.1);
 
     .material-symbols-outlined {
         font-variation-settings:
@@ -234,6 +235,10 @@ $side-bar-bg-color: #F0F5FC;
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     gap: 1em;
+
+    &.h-5 {
+        grid-template-columns: repeat(5, 1fr);
+    }
 
     &__header {
         .header__item {
